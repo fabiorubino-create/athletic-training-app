@@ -1,361 +1,302 @@
 <!DOCTYPE html>
 <html lang="it">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Athletic Training Manager</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-</head>
-<body>
-    <div class="container">
-        <!-- Sidebar Navigation -->
-        <aside class="sidebar">
-            <div class="logo">
-                <h1>⚡ ATM</h1>
-                <p>Athletic Training</p>
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="brand-mark">AT</div>
+          <div>
+            <h1>Athletic</h1>
+            <p>Training Manager</p>
+          </div>
+        </div>
+
+        <nav class="nav">
+          <button class="nav-item active" data-page="dashboard">📊 Dashboard</button>
+          <button class="nav-item" data-page="athletes">👥 Atlete</button>
+          <button class="nav-item" data-page="training">💪 Allenamenti</button>
+          <button class="nav-item" data-page="physio">🏥 Fisioterapia</button>
+          <button class="nav-item" data-page="reports">📈 Report</button>
+        </nav>
+      </aside>
+
+      <main class="main-panel">
+        <header class="topbar">
+          <h2 id="page-title">Dashboard</h2>
+          <div class="topbar-actions">
+            <button id="export-btn" class="icon-btn" title="Esporta CSV">💾</button>
+          </div>
+        </header>
+
+        <section id="dashboard" class="page active">
+          <div class="stats-grid">
+            <article class="stat-card accent-blue">
+              <div class="stat-icon">👥</div>
+              <div>
+                <div class="label">Atlete</div>
+                <div id="total-athletes" class="value">0</div>
+              </div>
+            </article>
+
+            <article class="stat-card accent-green">
+              <div class="stat-icon">💪</div>
+              <div>
+                <div class="label">Allenamenti</div>
+                <div id="total-workouts" class="value">0</div>
+              </div>
+            </article>
+
+            <article class="stat-card accent-purple">
+              <div class="stat-icon">🏥</div>
+              <div>
+                <div class="label">Fisioterapia</div>
+                <div id="total-physio" class="value">0</div>
+              </div>
+            </article>
+
+            <article class="stat-card accent-orange">
+              <div class="stat-icon">📅</div>
+              <div>
+                <div class="label">Ultimo aggiornamento</div>
+                <div id="last-update" class="value small">-</div>
+              </div>
+            </article>
+          </div>
+
+          <div class="chart-grid">
+            <div class="panel">
+              <h3>Attività ultima settimana</h3>
+              <canvas id="activityChart"></canvas>
             </div>
-            <nav class="menu">
-                <button class="menu-item active" data-page="dashboard">
-                    <span class="icon">📊</span> Dashboard
-                </button>
-                <button class="menu-item" data-page="athletes">
-                    <span class="icon">👥</span> Atlete
-                </button>
-                <button class="menu-item" data-page="training">
-                    <span class="icon">💪</span> Allenamenti
-                </button>
-                <button class="menu-item" data-page="physiotherapy">
-                    <span class="icon">🏥</span> Fisioterapia
-                </button>
-                <button class="menu-item" data-page="reports">
-                    <span class="icon">📈</span> Report
-                </button>
-            </nav>
-        </aside>
+            <div class="panel">
+              <h3>Distribuzione allenamenti</h3>
+              <canvas id="distributionChart"></canvas>
+            </div>
+          </div>
+        </section>
 
-        <!-- Main Content -->
-        <main class="main-content">
-            <!-- Header -->
-            <header class="header">
-                <h2 id="page-title">Dashboard</h2>
-                <div class="header-actions">
-                    <button class="btn-icon" title="Impostazioni">⚙️</button>
-                    <button class="btn-icon" id="export-btn" title="Esporta Dati">💾</button>
-                </div>
-            </header>
+        <section id="athletes" class="page">
+          <div class="section-header">
+            <h3>Atlete</h3>
+            <button id="add-athlete-btn" class="primary-btn">+ Aggiungi atleta</button>
+          </div>
+          <div id="athletes-list" class="cards-grid"></div>
+        </section>
 
-            <!-- Dashboard Page -->
-            <section id="dashboard" class="page active">
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-icon">👥</div>
-                        <div class="stat-content">
-                            <p class="stat-label">Atlete Totali</p>
-                            <p class="stat-value" id="total-athletes">0</p>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon">💪</div>
-                        <div class="stat-content">
-                            <p class="stat-label">Allenamenti Registrati</p>
-                            <p class="stat-value" id="total-trainings">0</p>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon">🏥</div>
-                        <div class="stat-content">
-                            <p class="stat-label">Trattamenti Fisio</p>
-                            <p class="stat-value" id="total-physio">0</p>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon">📅</div>
-                        <div class="stat-content">
-                            <p class="stat-label">Ultimo Aggiornamento</p>
-                            <p class="stat-value" id="last-update">-</p>
-                        </div>
-                    </div>
-                </div>
+        <section id="training" class="page">
+          <div class="section-header">
+            <h3>Allenamenti</h3>
+            <button id="add-training-btn" class="primary-btn">+ Nuovo allenamento</button>
+          </div>
 
-                <div class="charts-grid">
-                    <div class="chart-container">
-                        <h3>Attività Recente</h3>
-                        <canvas id="activity-chart"></canvas>
-                    </div>
-                    <div class="chart-container">
-                        <h3>Distribuzione Allenamenti</h3>
-                        <canvas id="distribution-chart"></canvas>
-                    </div>
-                </div>
-            </section>
+          <div class="filters-row">
+            <select id="filter-athlete">
+              <option value="">Tutte le atlete</option>
+            </select>
+            <input type="date" id="filter-date" />
+            <button id="clear-filters" class="secondary-btn">Cancella filtri</button>
+          </div>
 
-            <!-- Athletes Page -->
-            <section id="athletes" class="page">
-                <div class="page-header">
-                    <h3>Gestione Atlete</h3>
-                    <button class="btn btn-primary" id="add-athlete-btn">+ Aggiungi Atleta</button>
-                </div>
+          <div id="trainings-list" class="list-stack"></div>
+        </section>
 
-                <div id="athletes-list" class="athletes-grid">
-                    <!-- Athletes cards will be loaded here -->
-                </div>
+        <section id="physio" class="page">
+          <div class="section-header">
+            <h3>Fisioterapia</h3>
+            <button id="add-physio-btn" class="primary-btn">+ Nuovo trattamento</button>
+          </div>
 
-                <!-- Add Athlete Modal -->
-                <div id="athlete-modal" class="modal hidden">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h3>Aggiungi Nuova Atleta</h3>
-                            <button class="close-modal">&times;</button>
-                        </div>
-                        <form id="athlete-form">
-                            <div class="form-group">
-                                <label>Nome Atleta</label>
-                                <input type="text" id="athlete-name" required placeholder="Es. Maria Rossi">
-                            </div>
-                            <div class="form-group">
-                                <label>Data di Nascita</label>
-                                <input type="date" id="athlete-dob">
-                            </div>
-                            <div class="form-group">
-                                <label>Categoria</label>
-                                <input type="text" id="athlete-category" placeholder="Es. Juniores, Seniores">
-                            </div>
-                            <div class="form-group">
-                                <label>Note</label>
-                                <textarea id="athlete-notes" placeholder="Eventuali note specifiche"></textarea>
-                            </div>
-                            <div class="form-actions">
-                                <button type="submit" class="btn btn-primary">Salva Atleta</button>
-                                <button type="button" class="btn btn-secondary close-modal">Annulla</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </section>
+          <div class="filters-row">
+            <select id="physio-athlete-filter">
+              <option value="">Tutte le atlete</option>
+            </select>
+            <input type="date" id="physio-date-filter" />
+            <button id="clear-physio-filters" class="secondary-btn">Cancella filtri</button>
+          </div>
 
-            <!-- Training Page -->
-            <section id="training" class="page">
-                <div class="page-header">
-                    <h3>Registrazione Allenamenti</h3>
-                    <button class="btn btn-primary" id="add-training-btn">+ Nuovo Allenamento</button>
-                </div>
+          <div id="physio-list" class="list-stack"></div>
+        </section>
 
-                <div class="training-container">
-                    <div class="training-filters">
-                        <select id="filter-athlete" class="form-control">
-                            <option value="">Tutte le Atlete</option>
-                        </select>
-                        <input type="date" id="filter-date" class="form-control">
-                        <button class="btn btn-secondary" id="clear-filters">Cancella Filtri</button>
-                    </div>
+        <section id="reports" class="page">
+          <div class="section-header">
+            <h3>Report</h3>
+          </div>
 
-                    <div id="trainings-list" class="trainings-table">
-                        <!-- Training records will be loaded here -->
-                    </div>
-                </div>
+          <div class="filters-row report-selector">
+            <label for="report-athlete">Atleta</label>
+            <select id="report-athlete">
+              <option value="">Tutte le atlete</option>
+            </select>
+          </div>
 
-                <!-- Add Training Modal -->
-                <div id="training-modal" class="modal hidden">
-                    <div class="modal-content large">
-                        <div class="modal-header">
-                            <h3>Registra Allenamento</h3>
-                            <button class="close-modal">&times;</button>
-                        </div>
-                        <form id="training-form">
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label>Atleta</label>
-                                    <select id="training-athlete" required class="form-control">
-                                        <option value="">Seleziona Atleta</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label>Data Allenamento</label>
-                                    <input type="date" id="training-date" required>
-                                </div>
-                            </div>
+          <div class="report-grid">
+            <div class="panel">
+              <h3>Progresso volume</h3>
+              <canvas id="progressChart"></canvas>
+            </div>
+            <div class="panel">
+              <h3>Volume per mese</h3>
+              <canvas id="volumeChart"></canvas>
+            </div>
+            <div class="panel">
+              <h3>Frequenza allenamenti</h3>
+              <canvas id="frequencyChart"></canvas>
+            </div>
+            <div class="panel">
+              <h3>Esercizi più usati</h3>
+              <canvas id="exerciseChart"></canvas>
+            </div>
+          </div>
 
-                            <div id="exercises-container">
-                                <div class="exercise-block">
-                                    <h4>Esercizio 1</h4>
-                                    <div class="form-row">
-                                        <div class="form-group">
-                                            <label>Nome Esercizio</label>
-                                            <input type="text" class="exercise-name" placeholder="Es. Panca Piana" required>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Serie</label>
-                                            <input type="number" class="exercise-sets" placeholder="3" min="1" required>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Ripetizioni</label>
-                                            <input type="number" class="exercise-reps" placeholder="8" min="1" required>
-                                        </div>
-                                    </div>
-                                    <div class="form-row">
-                                        <div class="form-group">
-                                            <label>Peso (kg)</label>
-                                            <input type="number" class="exercise-weight" placeholder="100" step="0.5" min="0" required>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Recupero (min)</label>
-                                            <input type="number" class="exercise-rest" placeholder="2" min="0" step="0.5">
-                                        </div>
-                                        <div class="form-group">
-                                            <label>TL (calcolato)</label>
-                                            <input type="number" class="exercise-tl" disabled readonly style="background: #f0f0f0;">
-                                        </div>
-                                    </div>
-                                    <button type="button" class="btn btn-danger btn-small remove-exercise">Rimuovi Esercizio</button>
-                                </div>
-                            </div>
+          <div class="report-actions">
+            <button id="export-pdf-btn" class="primary-btn">📄 Stampa report</button>
+            <button id="export-csv-btn" class="secondary-btn">📊 Esporta CSV</button>
+          </div>
+        </section>
+      </main>
+    </div>
 
-                            <button type="button" class="btn btn-secondary" id="add-exercise-btn">+ Aggiungi Esercizio</button>
+    <div id="athlete-modal" class="modal hidden">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h3>Nuova atleta</h3>
+          <button class="close-modal" type="button" aria-label="Chiudi">×</button>
+        </div>
 
-                            <div class="form-group">
-                                <label>Volume Totale Allenamento (calcolato)</label>
-                                <input type="number" id="training-volume" disabled readonly style="background: #f0f0f0;">
-                            </div>
+        <form id="athlete-form">
+          <div class="field">
+            <label>Nome atleta</label>
+            <input type="text" id="athlete-name" required />
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label>Data nascita</label>
+              <input type="date" id="athlete-dob" />
+            </div>
+            <div class="field">
+              <label>Categoria</label>
+              <input type="text" id="athlete-category" placeholder="Es. Senior" />
+            </div>
+          </div>
+          <div class="field">
+            <label>Note</label>
+            <textarea id="athlete-notes" rows="3"></textarea>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="primary-btn">Salva</button>
+            <button type="button" class="secondary-btn close-modal">Annulla</button>
+          </div>
+        </form>
+      </div>
+    </div>
 
-                            <div class="form-group">
-                                <label>Note</label>
-                                <textarea id="training-notes" placeholder="Note su come si è svolta la seduta"></textarea>
-                            </div>
+    <div id="training-modal" class="modal hidden">
+      <div class="modal-card wide">
+        <div class="modal-header">
+          <h3>Nuovo allenamento</h3>
+          <button class="close-modal" type="button" aria-label="Chiudi">×</button>
+        </div>
 
-                            <div class="form-actions">
-                                <button type="submit" class="btn btn-primary">Salva Allenamento</button>
-                                <button type="button" class="btn btn-secondary close-modal">Annulla</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </section>
+        <form id="training-form">
+          <div class="field-row">
+            <div class="field">
+              <label>Atleta</label>
+              <select id="training-athlete" required></select>
+            </div>
+            <div class="field">
+              <label>Data</label>
+              <input type="date" id="training-date" required />
+            </div>
+          </div>
 
-            <!-- Physiotherapy Page -->
-            <section id="physiotherapy" class="page">
-                <div class="page-header">
-                    <h3>Gestione Fisioterapia</h3>
-                    <button class="btn btn-primary" id="add-physio-btn">+ Nuovo Trattamento</button>
-                </div>
+          <div id="exercise-list"></div>
 
-                <div class="physio-container">
-                    <div class="physio-filters">
-                        <select id="physio-filter-athlete" class="form-control">
-                            <option value="">Tutte le Atlete</option>
-                        </select>
-                        <input type="date" id="physio-filter-date" class="form-control">
-                        <button class="btn btn-secondary" id="physio-clear-filters">Cancella Filtri</button>
-                    </div>
+          <button type="button" id="add-exercise-btn" class="secondary-btn">+ Aggiungi esercizio</button>
 
-                    <div id="physio-list" class="physio-records">
-                        <!-- Physiotherapy records will be loaded here -->
-                    </div>
-                </div>
+          <div class="field">
+            <label>Volume totale</label>
+            <input type="text" id="training-volume" readonly value="0" />
+          </div>
 
-                <!-- Add Physiotherapy Modal -->
-                <div id="physio-modal" class="modal hidden">
-                    <div class="modal-content large">
-                        <div class="modal-header">
-                            <h3>Registra Trattamento Fisioterapia</h3>
-                            <button class="close-modal">&times;</button>
-                        </div>
-                        <form id="physio-form">
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label>Atleta</label>
-                                    <select id="physio-athlete" required class="form-control">
-                                        <option value="">Seleziona Atleta</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label>Data Trattamento</label>
-                                    <input type="date" id="physio-date" required>
-                                </div>
-                            </div>
+          <div class="field">
+            <label>Note</label>
+            <textarea id="training-notes" rows="3"></textarea>
+          </div>
 
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label>Parte Anatomica</label>
-                                    <input type="text" id="physio-body-part" placeholder="Es. Spalla, Ginocchio" required>
-                                </div>
-                                <div class="form-group">
-                                    <label>Causa del Dolore</label>
-                                    <input type="text" id="physio-pain-cause" placeholder="Es. Infiammazione, Strappo" required>
-                                </div>
-                            </div>
+          <div class="form-actions">
+            <button type="submit" class="primary-btn">Salva allenamento</button>
+            <button type="button" class="secondary-btn close-modal">Annulla</button>
+          </div>
+        </form>
+      </div>
+    </div>
 
-                            <div class="form-group">
-                                <label>Trattamento Effettuato</label>
-                                <textarea id="physio-treatment" placeholder="Descrivi il trattamento" required></textarea>
-                            </div>
+    <div id="physio-modal" class="modal hidden">
+      <div class="modal-card wide">
+        <div class="modal-header">
+          <h3>Nuovo trattamento fisioterapico</h3>
+          <button class="close-modal" type="button" aria-label="Chiudi">×</button>
+        </div>
 
-                            <div class="form-group">
-                                <label>Esercizi Consigliati</label>
-                                <textarea id="physio-exercises" placeholder="Esercizi da svolgere a casa/in palestra"></textarea>
-                            </div>
+        <form id="physio-form">
+          <div class="field-row">
+            <div class="field">
+              <label>Atleta</label>
+              <select id="physio-athlete" required></select>
+            </div>
+            <div class="field">
+              <label>Data visita</label>
+              <input type="date" id="physio-date" required />
+            </div>
+          </div>
 
-                            <div class="form-group">
-                                <label>Giorni di Controllo Successivo</label>
-                                <input type="date" id="physio-followup-date">
-                            </div>
+          <div class="field-row">
+            <div class="field">
+              <label>Parte anatomica</label>
+              <input type="text" id="physio-body-part" required placeholder="Es. spalla, ginocchio" />
+            </div>
+            <div class="field">
+              <label>Causa del dolore</label>
+              <input type="text" id="physio-cause" required placeholder="Es. infiammazione" />
+            </div>
+          </div>
 
-                            <div class="form-group">
-                                <label>Note Aggiuntive</label>
-                                <textarea id="physio-notes" placeholder="Note importanti"></textarea>
-                            </div>
+          <div class="field">
+            <label>Trattamento</label>
+            <textarea id="physio-treatment" rows="3" required></textarea>
+          </div>
 
-                            <div class="form-actions">
-                                <button type="submit" class="btn btn-primary">Salva Trattamento</button>
-                                <button type="button" class="btn btn-secondary close-modal">Annulla</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </section>
+          <div class="field">
+            <label>Esercizi consigliati</label>
+            <textarea id="physio-exercises" rows="3"></textarea>
+          </div>
 
-            <!-- Reports Page -->
-            <section id="reports" class="page">
-                <div class="page-header">
-                    <h3>Report e Grafici</h3>
-                </div>
+          <div class="field-row">
+            <div class="field">
+              <label>Giorno controllo</label>
+              <input type="date" id="physio-followup" />
+            </div>
+            <div class="field">
+              <label>Note aggiuntive</label>
+              <input type="text" id="physio-notes" placeholder="Opzionale" />
+            </div>
+          </div>
 
-                <div class="reports-container">
-                    <div class="report-selector">
-                        <label>Seleziona Atleta:</label>
-                        <select id="report-athlete" class="form-control">
-                            <option value="">Tutte le Atlete</option>
-                        </select>
-                    </div>
-
-                    <div class="report-grid">
-                        <div class="report-card">
-                            <h4>Progresso Carico per Esercizio</h4>
-                            <canvas id="progress-chart"></canvas>
-                        </div>
-                        <div class="report-card">
-                            <h4>Volume Totale per Mese</h4>
-                            <canvas id="volume-chart"></canvas>
-                        </div>
-                        <div class="report-card">
-                            <h4>Frequenza Allenamenti</h4>
-                            <canvas id="frequency-chart"></canvas>
-                        </div>
-                        <div class="report-card">
-                            <h4>Esercizi Più Utilizzati</h4>
-                            <canvas id="exercises-chart"></canvas>
-                        </div>
-                    </div>
-
-                    <div class="report-actions">
-                        <button class="btn btn-primary" id="export-pdf-btn">📄 Scarica Report PDF</button>
-                        <button class="btn btn-primary" id="export-csv-btn">📊 Scarica Dati CSV</button>
-                    </div>
-                </div>
-            </section>
-        </main>
+          <div class="form-actions">
+            <button type="submit" class="primary-btn">Salva</button>
+            <button type="button" class="secondary-btn close-modal">Annulla</button>
+          </div>
+        </form>
+      </div>
     </div>
 
     <script src="app.js"></script>
-</body>
+  </body>
 </html>
