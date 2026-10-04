@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Athletic Training Manager</title>
+    <title>Chorus Volley Bergamo - App</title>
     <link rel="stylesheet" href="styles.css" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   </head>
@@ -11,10 +11,18 @@
     <div class="app-shell">
       <aside class="sidebar">
         <div class="brand">
-          <div class="brand-mark">AT</div>
+          <div class="brand-mark" aria-label="Logo Chorus Volley Bergamo">
+            <svg viewBox="0 0 200 200" aria-hidden="true">
+              <path d="M100 18 C120 18, 163 38, 167 67 C171 94, 150 121, 129 131 L100 150 L71 131 C50 121, 29 94, 33 67 C37 38, 80 18, 100 18 Z" fill="#ffffff" opacity="0.18"/>
+              <path d="M100 33 C118 33, 146 48, 151 70 C156 94, 136 118, 116 129 L100 138 L84 129 C64 118, 44 94, 49 70 C54 48, 82 33, 100 33 Z" fill="#ffffff"/>
+              <path d="M100 50 C108 50, 118 55, 123 64 C128 73, 128 85, 120 94 C112 103, 100 108, 88 103 C77 98, 69 89, 68 78 C67 64, 80 50, 100 50 Z" fill="#1d4e89"/>
+              <path d="M100 63 L110 83 L132 83 L114 97 L121 119 L100 106 L79 119 L86 97 L68 83 L90 83 Z" fill="#ffffff"/>
+              <text x="100" y="170" text-anchor="middle" font-size="18" font-weight="700" fill="#ffffff">CVB</text>
+            </svg>
+          </div>
           <div>
-            <h1>Athletic</h1>
-            <p>Training Manager</p>
+            <h1>ChorusLife</h1>
+            <p>Volley Bergamo</p>
           </div>
         </div>
 
@@ -70,13 +78,19 @@
             </article>
           </div>
 
+          <div class="filters-row dashboard-filters">
+            <select id="dashboard-athlete-filter">
+              <option value="">Tutte le atlete</option>
+            </select>
+          </div>
+
           <div class="chart-grid">
             <div class="panel">
-              <h3>Attività ultima settimana</h3>
+              <h3>TL ultima settimana</h3>
               <canvas id="activityChart"></canvas>
             </div>
             <div class="panel">
-              <h3>Distribuzione allenamenti</h3>
+              <h3>TL per atleta</h3>
               <canvas id="distributionChart"></canvas>
             </div>
           </div>
@@ -181,13 +195,25 @@
               <input type="date" id="athlete-dob" />
             </div>
             <div class="field">
-              <label>Categoria</label>
-              <input type="text" id="athlete-category" placeholder="Es. Senior" />
+              <label>Squadra</label>
+              <select id="athlete-squad" required>
+                <option value="">Seleziona squadra</option>
+                <option value="U19/17">U19/17</option>
+                <option value="U15">U15</option>
+                <option value="U14">U14</option>
+                <option value="U13">U13</option>
+              </select>
             </div>
           </div>
-          <div class="field">
-            <label>Note</label>
-            <textarea id="athlete-notes" rows="3"></textarea>
+          <div class="field-row">
+            <div class="field">
+              <label>Ruolo</label>
+              <input type="text" id="athlete-role" placeholder="Es. Centrale, Opposto" />
+            </div>
+            <div class="field">
+              <label>Note</label>
+              <input type="text" id="athlete-notes" placeholder="Opzionale" />
+            </div>
           </div>
           <div class="form-actions">
             <button type="submit" class="primary-btn">Salva</button>
@@ -198,43 +224,45 @@
     </div>
 
     <div id="training-modal" class="modal hidden">
-      <div class="modal-card wide">
+      <div class="modal-card wide training-modal-card">
         <div class="modal-header">
           <h3>Nuovo allenamento</h3>
           <button class="close-modal" type="button" aria-label="Chiudi">×</button>
         </div>
 
-        <form id="training-form">
-          <div class="field-row">
-            <div class="field">
-              <label>Atleta</label>
-              <select id="training-athlete" required></select>
+        <div class="modal-form-scroll">
+          <form id="training-form">
+            <div class="field-row">
+              <div class="field">
+                <label>Atleta</label>
+                <select id="training-athlete" required></select>
+              </div>
+              <div class="field">
+                <label>Data</label>
+                <input type="date" id="training-date" required />
+              </div>
             </div>
+
+            <div id="exercise-list"></div>
+
+            <button type="button" id="add-exercise-btn" class="secondary-btn">+ Aggiungi esercizio</button>
+
             <div class="field">
-              <label>Data</label>
-              <input type="date" id="training-date" required />
+              <label>Volume totale</label>
+              <input type="text" id="training-volume" readonly value="0" />
             </div>
-          </div>
 
-          <div id="exercise-list"></div>
+            <div class="field">
+              <label>Note</label>
+              <textarea id="training-notes" rows="3"></textarea>
+            </div>
 
-          <button type="button" id="add-exercise-btn" class="secondary-btn">+ Aggiungi esercizio</button>
-
-          <div class="field">
-            <label>Volume totale</label>
-            <input type="text" id="training-volume" readonly value="0" />
-          </div>
-
-          <div class="field">
-            <label>Note</label>
-            <textarea id="training-notes" rows="3"></textarea>
-          </div>
-
-          <div class="form-actions">
-            <button type="submit" class="primary-btn">Salva allenamento</button>
-            <button type="button" class="secondary-btn close-modal">Annulla</button>
-          </div>
-        </form>
+            <div class="form-actions">
+              <button type="submit" class="primary-btn">Salva allenamento</button>
+              <button type="button" class="secondary-btn close-modal">Annulla</button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
 
