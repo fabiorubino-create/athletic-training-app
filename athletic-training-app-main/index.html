@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Gestione delle performance, degli allenamenti e della fisioterapia della Chorus Life Volley Bergamo Academy." />
+    <title>Chorus Life Volley Bergamo Academy</title>
+    <link rel="stylesheet" href="styles.css?v=6" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <img class="brand-logo" src="assets/chorus-academy-logo.jpg" alt="ChorusLife Volley Bergamo Academy" />
+          <div>
+            <h1>ChorusLife</h1>
+            <p>Volley Bergamo</p>
+          </div>
+        </div>
+
+        <nav class="nav">
+          <button class="nav-item" data-page="athletes">👥 Atlete</button>
+          <button class="nav-item" data-page="attendance">🗓️ Registro Presenze</button>
+          <button class="nav-item active" data-page="dashboard">🏋️ Area Atletica</button>
+          <button class="nav-item" data-page="physio">🩺 Area Fisioterapica</button>
+          <button class="nav-item" data-page="psychological-area">🧠 Area Psicologia</button>
+          <button class="nav-item" data-page="technical-area">🏐 Area Tecnica</button>
+          <button class="nav-item" data-page="reports">📈 Report</button>
+        </nav>
+      </aside>
+
+      <main class="main-panel">
+        <div class="print-brand">
+          <img src="assets/chorus-academy-logo.jpg" alt="" />
+          <strong>Chorus Life Volley Bergamo Academy</strong>
+        </div>
+        <header class="topbar">
+          <h2 id="page-title">Area Atletica</h2>
+          <div class="topbar-actions">
+            <button id="export-btn" class="icon-btn" title="Esporta CSV">💾</button>
+          </div>
+        </header>
+
+        <section id="dashboard" class="page active">
+          <div class="stats-grid overview-stats">
+            <article class="stat-card accent-blue">
+              <div class="stat-icon">👥</div>
+              <div>
+                <div class="label">Atlete</div>
+                <div id="total-athletes" class="value">0</div>
+              </div>
+            </article>
+
+            <article class="stat-card accent-green">
+              <div class="stat-icon">💪</div>
+              <div>
+                <div class="label">Allenamenti</div>
+                <div id="total-workouts" class="value">0</div>
+              </div>
+            </article>
+
+            <article class="stat-card accent-purple">
+              <div class="stat-icon">🏥</div>
+              <div>
+                <div class="label">Area Fisioterapica</div>
+                <div id="total-physio" class="value">0</div>
+              </div>
+            </article>
+
+            <article class="stat-card accent-orange">
+              <div class="stat-icon">📅</div>
+              <div>
+                <div class="label">Ultimo aggiornamento</div>
+                <div id="last-update" class="value small">-</div>
+              </div>
+            </article>
+          </div>
+
+          <div class="filters-row dashboard-filters">
+            <div class="field">
+              <label for="dashboard-squad-filter">Squadra</label>
+              <select id="dashboard-squad-filter">
+                <option value="">Tutte le squadre</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="dashboard-athlete-filter">Atleta</label>
+              <select id="dashboard-athlete-filter">
+                <option value="">Tutte le atlete</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="dashboard-date-from">Dal</label>
+              <input type="date" id="dashboard-date-from" />
+            </div>
+            <div class="field">
+              <label for="dashboard-date-to">Al</label>
+              <input type="date" id="dashboard-date-to" />
+            </div>
+            <div class="field">
+              <label for="dashboard-exercise-filter">Esercizio evidenziato</label>
+              <select id="dashboard-exercise-filter" aria-label="Evidenzia un esercizio">
+                <option value="">Tutti i 6 esercizi</option>
+                <option value="Squat">Squat</option>
+                <option value="Stacco da terra">Stacco da terra</option>
+                <option value="Push Press">Push Press</option>
+                <option value="TRX">TRX</option>
+                <option value="Panca Piana">Panca Piana</option>
+                <option value="Affondi">Affondi</option>
+              </select>
+            </div>
+          </div>
+          <p class="dashboard-filter-hint">L'esercizio selezionato viene evidenziato; tutti e sei i grafici restano visibili.</p>
+
+          <div class="stats-grid performance-kpis">
+            <article class="stat-card accent-blue">
+              <div class="stat-icon">⚡</div>
+              <div><div class="label">Training Load</div><div id="dashboard-total-tl" class="value">0</div></div>
+            </article>
+            <div class="dashboard-export">
+              <button id="open-training-btn" class="primary-btn" type="button">💪 Apri Allenamenti</button>
+              <button id="dashboard-pdf-btn" class="primary-btn" type="button">Stampa dashboard / PDF</button>
+              <button id="dashboard-excel-btn" class="secondary-btn" type="button">Esporta Excel</button>
+            </div>
+          </div>
+
+          <div id="dashboard-exercise-charts" class="exercise-performance-grid"></div>
+        </section>
+
+        <section id="athletes" class="page">
+          <div class="section-header">
+            <h3>Atlete</h3>
+            <button id="add-athlete-btn" class="primary-btn">+ Aggiungi atleta</button>
+          </div>
+          <div id="athletes-list" class="cards-grid"></div>
+        </section>
+
+        <section id="training" class="page">
+          <div class="section-header">
+            <h3>Allenamenti</h3>
+            <div class="physio-header-actions">
+              <button id="back-to-athletics-btn" class="secondary-btn" type="button">Torna all'Area Atletica</button>
+              <button id="add-training-btn" class="primary-btn">+ Nuovo allenamento</button>
+            </div>
+          </div>
+
+          <div class="filters-row">
+            <div class="field">
+              <label for="filter-squad">Squadra</label>
+              <select id="filter-squad">
+                <option value="">Tutte le squadre</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="filter-athlete">Atleta</label>
+              <select id="filter-athlete">
+                <option value="">Tutte le atlete</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="filter-date-from">Dal</label>
+              <input type="date" id="filter-date-from" />
+            </div>
+            <div class="field">
+              <label for="filter-date-to">Al</label>
+              <input type="date" id="filter-date-to" />
+            </div>
+            <button id="clear-filters" class="secondary-btn" type="button">Cancella filtri</button>
+          </div>
+
+          <div id="trainings-list" class="list-stack"></div>
+        </section>
+
+        <section id="technical-area" class="page">
+          <div class="section-header">
+            <h3>Area Tecnica</h3>
+          </div>
+          <div class="filters-row technical-filters">
+            <div class="field">
+              <label for="technical-squad-filter">Squadra</label>
+              <select id="technical-squad-filter">
+                <option value="">Tutte le squadre</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="technical-athlete-filter">Atleta</label>
+              <select id="technical-athlete-filter">
+                <option value="">Tutte le atlete</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="technical-date-from">Dal</label>
+              <input type="date" id="technical-date-from" />
+            </div>
+            <div class="field">
+              <label for="technical-date-to">Al</label>
+              <input type="date" id="technical-date-to" />
+            </div>
+          </div>
+
+          <div class="stats-grid technical-kpis">
+            <article class="stat-card accent-blue">
+              <div class="stat-icon">🏅</div>
+              <div><div class="label">Indice Totale Atleta (WEI / IQS Totale)</div><div id="technical-total-index" class="value">0</div></div>
+            </article>
+            <article class="stat-card accent-purple">
+              <div class="stat-icon">📊</div>
+              <div><div class="label">Indice Medio per Set (IQS/Set)</div><div id="technical-average-index" class="value">0</div></div>
+            </article>
+            <article class="stat-card accent-green">
+              <div class="stat-icon">🏐</div>
+              <div>
+                <div class="label">Totale Set Giocati per Categoria</div>
+                <div id="technical-total-sets" class="value">0</div>
+                <div id="technical-category-sets" class="technical-category-breakdown"></div>
+              </div>
+            </article>
+          </div>
+
+          <div class="technical-charts">
+            <section class="panel technical-group" aria-labelledby="side-out-title">
+              <h3 id="side-out-title">SIDE OUT</h3>
+              <div class="report-grid technical-group-charts">
+                <article class="panel"><h3>RICE POS %</h3><div class="technical-chart-wrap"><canvas id="technical-pos-chart"></canvas></div></article>
+                <article class="panel"><h3>RICE PERF %</h3><div class="technical-chart-wrap"><canvas id="technical-perf-chart"></canvas></div></article>
+                <article class="panel"><h3>ATTACCO %</h3><div class="technical-chart-wrap"><canvas id="technical-attack-chart"></canvas></div></article>
+                <article class="panel"><h3>Alzate positive / RICE (%)</h3><div class="technical-chart-wrap"><canvas id="technical-setting-chart"></canvas></div></article>
+              </div>
+            </section>
+            <section class="panel technical-group" aria-labelledby="break-point-title">
+              <h3 id="break-point-title">BREAK POINT</h3>
+              <div class="report-grid technical-group-charts">
+                <article class="panel"><h3>MURO PT</h3><div class="technical-chart-wrap"><canvas id="technical-block-chart"></canvas></div></article>
+                <article class="panel"><h3>BATT PT</h3><div class="technical-chart-wrap"><canvas id="technical-serve-chart"></canvas></div></article>
+              </div>
+            </section>
+          </div>
+
+          <p class="panel technical-data-status">I dati e i grafici saranno disponibili quando verrà collegato il database online.</p>
+          <div id="technical-records" class="list-stack"></div>
+        </section>
+
+        <section id="attendance" class="page">
+          <div class="section-header"><h3>Registro Presenze</h3></div>
+          <div class="filters-row attendance-filters">
+            <div class="field">
+              <label for="attendance-filter-squad">Squadra</label>
+              <select id="attendance-filter-squad">
+                <option value="">Tutte le squadre</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="attendance-athlete-filter">Atleta</label>
+              <select id="attendance-athlete-filter">
+                <option value="">Tutte le atlete</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="attendance-date-from">Dal</label>
+              <input type="date" id="attendance-date-from" />
+            </div>
+            <div class="field">
+              <label for="attendance-date-to">Al</label>
+              <input type="date" id="attendance-date-to" />
+            </div>
+          </div>
+          <div class="stats-grid attendance-kpis">
+            <article class="stat-card accent-green"><div class="stat-icon">✅</div><div><div class="label">Totale Presenze</div><div id="attendance-present-total" class="value">0</div></div></article>
+            <article class="stat-card accent-orange"><div class="stat-icon">➖</div><div><div class="label">Totale Assenze</div><div id="attendance-absent-total" class="value">0</div></div></article>
+            <article class="stat-card accent-blue"><div class="stat-icon">📈</div><div><div class="label">Percentuale di Presenza</div><div id="attendance-present-rate" class="value">0%</div></div></article>
+            <article class="stat-card accent-purple"><div class="stat-icon">📉</div><div><div class="label">Percentuale di Assenza</div><div id="attendance-absent-rate" class="value">0%</div></div></article>
+          </div>
+          <article class="panel attendance-chart-panel">
+            <h3>Presenze e assenze</h3>
+            <div class="attendance-donut-wrap"><canvas id="attendance-donut-chart"></canvas></div>
+          </article>
+          <div class="section-header sub-section-header"><h3>Registra sessione</h3></div>
+          <form id="attendance-form" class="panel entry-form">
+            <div class="field-row">
+              <div class="field"><label for="attendance-date">Data</label><input type="date" id="attendance-date" required /></div>
+              <div class="field"><label for="attendance-type">Tipo sessione</label><select id="attendance-type" required><option value="Allenamento">Allenamento</option><option value="Gara">Gara</option></select></div>
+              <div class="field">
+                <label for="attendance-squad-filter">Squadra</label>
+                <select id="attendance-squad-filter">
+                  <option value="">Tutte le squadre</option>
+                  <option value="U19/17">U19/17</option>
+                  <option value="U15">U15</option>
+                  <option value="U14">U14</option>
+                  <option value="U13">U13</option>
+                  <option value="SCUOLA DI PALLAVOLO">SCUOLA DI PALLAVOLO</option>
+                </select>
+              </div>
+              <div class="field"><label for="attendance-label">Descrizione / avversario</label><input type="text" id="attendance-label" placeholder="Facoltativo" /></div>
+            </div>
+            <div id="attendance-athlete-list" class="attendance-table-wrap"></div>
+            <div class="form-actions"><button type="submit" class="primary-btn">Salva presenze</button></div>
+          </form>
+          <div id="attendance-records" class="list-stack"></div>
+        </section>
+
+        <section id="physio" class="page">
+          <div class="section-header">
+            <h3>Area Fisioterapica</h3>
+            <div class="physio-header-actions">
+              <button id="physio-pdf-btn" class="secondary-btn" type="button">Stampa report / PDF</button>
+              <button id="physio-excel-btn" class="secondary-btn" type="button">Esporta Excel</button>
+              <button id="add-physio-btn" class="primary-btn">+ Nuovo trattamento</button>
+            </div>
+          </div>
+
+          <div class="filters-row physio-filters">
+            <div class="field">
+              <label for="physio-squad-filter">Squadra</label>
+              <select id="physio-squad-filter">
+                <option value="">Tutte le squadre</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="physio-athlete-filter">Atleta</label>
+              <select id="physio-athlete-filter">
+                <option value="">Tutte le atlete</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="physio-date-from">Dal</label>
+              <input type="date" id="physio-date-from" />
+            </div>
+            <div class="field">
+              <label for="physio-date-to">Al</label>
+              <input type="date" id="physio-date-to" />
+            </div>
+            <button id="clear-physio-filters" class="secondary-btn" type="button">Cancella filtri</button>
+          </div>
+
+          <div class="physio-analytics-grid">
+            <article class="panel physio-kpi-panel">
+              <span class="label">Trattamenti e distribuzione per distretto</span>
+              <strong id="physio-filtered-total" class="physio-treatment-total">0</strong>
+              <ul id="physio-district-breakdown" class="physio-anatomy-breakdown"></ul>
+            </article>
+            <article class="panel body-map-panel">
+              <div class="body-map-header">
+                <div>
+                  <h3>Mappa del dolore a riposo</h3>
+                  <p>Intensità registrata; in presenza di più valutazioni mostra il valore massimo per distretto.</p>
+                </div>
+                <div class="body-map-tabs" role="group" aria-label="Vista della mappa corporea">
+                  <button type="button" class="body-map-tab active" data-body-view="front" aria-pressed="true">Fronte</button>
+                  <button type="button" class="body-map-tab" data-body-view="back" aria-pressed="false">Retro</button>
+                </div>
+              </div>
+              <div id="body-map-content" class="body-map-content"></div>
+              <p id="body-map-detail" class="body-map-detail" aria-live="polite">Seleziona un distretto sulla mappa.</p>
+              <div class="pain-legend"><span>1 · minimo</span><span class="pain-gradient"></span><span>10 · massimo</span></div>
+            </article>
+          </div>
+
+          <div id="physio-list" class="list-stack"></div>
+        </section>
+
+        <section id="psychological-area" class="page">
+          <div class="section-header">
+            <h3>Area Psicologia</h3>
+          </div>
+          <div class="filters-row psychological-filters">
+            <div class="field">
+              <label for="psychological-squad-filter">Squadra</label>
+              <select id="psychological-squad-filter">
+                <option value="">Tutte le squadre</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="psychological-athlete-filter">Atleta</label>
+              <select id="psychological-athlete-filter">
+                <option value="">Tutte le atlete</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="psychological-date-from">Dal</label>
+              <input type="date" id="psychological-date-from" />
+            </div>
+            <div class="field">
+              <label for="psychological-date-to">Al</label>
+              <input type="date" id="psychological-date-to" />
+            </div>
+          </div>
+          <article class="panel ipps48-panel">
+            <div class="ipps48-heading">
+              <div>
+                <span class="report-eyebrow">VALUTAZIONE DELLA PRESTAZIONE PSICOLOGICA</span>
+                <h3>iPPS-48 · Profilo degli 8 item</h3>
+                <p id="ipps48-selection-detail" class="report-muted">Il grafico si popolerà dopo il caricamento delle rilevazioni iPPS-48.</p>
+              </div>
+              <span class="ipps48-badge">8 DIMENSIONI</span>
+            </div>
+            <div class="ipps48-chart-wrap">
+              <canvas id="ipps48-chart" aria-label="Grafico a barre dei punteggi iPPS-48 per otto dimensioni" hidden></canvas>
+              <p id="ipps48-empty" class="empty-state">Il grafico si popolerà dopo il caricamento delle rilevazioni iPPS-48.</p>
+            </div>
+            <p class="ipps48-footnote">Il grafico mostra una rilevazione per atleta e data. La scala dei punteggi dipenderà dai valori forniti dal foglio di calcolo o dal database.</p>
+          </article>
+        </section>
+
+        <section id="reports" class="page">
+          <div class="section-header">
+            <h3>Dashboard Report generale</h3>
+          </div>
+
+          <div class="filters-row report-selector">
+            <div class="field">
+              <label for="report-squad">Squadra</label>
+              <select id="report-squad">
+                <option value="">Tutte le squadre</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="report-athlete">Atleta</label>
+              <select id="report-athlete">
+                <option value="">Tutte le atlete</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="report-date-from">Dal</label>
+              <input type="date" id="report-date-from" />
+            </div>
+            <div class="field">
+              <label for="report-date-to">Al</label>
+              <input type="date" id="report-date-to" />
+            </div>
+          </div>
+
+          <div class="panel report-cover">
+            <div>
+              <span class="report-eyebrow">REPORT ATLETA · DOCUMENTO DI SINTESI</span>
+              <h3 id="report-athlete-title">Riepilogo generale · Tutte le atlete</h3>
+              <p id="report-period-label">Periodo: tutto lo storico</p>
+            </div>
+            <label class="report-photo-control" for="report-photo-input">
+              <span>Foto atleta (facoltativa per il PDF)</span>
+              <input type="file" id="report-photo-input" accept="image/*" />
+            </label>
+            <figure class="report-photo-frame">
+              <img id="report-photo-preview" alt="Foto dell’atleta selezionata" hidden />
+              <figcaption id="report-photo-placeholder">Spazio foto atleta</figcaption>
+            </figure>
+          </div>
+
+          <div class="report-dashboard-grid">
+          <section class="report-section" aria-labelledby="report-general-title">
+            <h3 id="report-general-title" class="report-section-title">AREA GENERALE</h3>
+            <div class="stats-grid report-summary-stats">
+              <article class="stat-card accent-blue"><div class="stat-icon">👥</div><div><div class="label">Atlete incluse</div><div id="report-athlete-count" class="value">0</div></div></article>
+              <article class="stat-card accent-green"><div class="stat-icon">✅</div><div><div class="label">Presenza registrata</div><div id="report-attendance-rate" class="value">0%</div></div></article>
+              <article class="stat-card accent-purple"><div class="stat-icon">🗓️</div><div><div class="label">Presenze / assenze</div><div id="report-attendance-counts" class="value report-value-compact">0 / 0</div></div></article>
+              <article class="stat-card accent-orange"><div class="stat-icon">📋</div><div><div class="label">Sessioni con presenze</div><div id="report-session-count" class="value">0</div></div></article>
+            </div>
+            <div class="panel report-attendance-summary">
+              <div>
+                <h3>Registro presenze nel periodo</h3>
+                <p id="report-attendance-detail" class="report-muted">Nessun dato di presenza nel periodo selezionato.</p>
+              </div>
+              <div class="report-attendance-chart-wrap"><canvas id="report-attendance-chart"></canvas></div>
+            </div>
+          </section>
+
+          <section class="report-section" aria-labelledby="report-athletic-title">
+            <h3 id="report-athletic-title" class="report-section-title">AREA ATLETICA</h3>
+            <div class="stats-grid report-summary-stats">
+              <article class="stat-card accent-blue"><div class="stat-icon">💪</div><div><div class="label">Allenamenti</div><div id="report-workout-count" class="value">0</div></div></article>
+              <article class="stat-card accent-green"><div class="stat-icon">⚡</div><div><div class="label">Training Load totale</div><div id="report-training-load" class="value report-value-compact">0</div></div></article>
+            </div>
+            <div class="report-grid report-exercise-charts">
+              <div class="panel"><h3>Squat · 1RM stimato e carico reale (kg)</h3><canvas id="report-squat-1rm"></canvas></div>
+              <div class="panel"><h3>Stacco da terra · 1RM stimato e carico reale (kg)</h3><canvas id="report-deadlift-1rm"></canvas></div>
+              <div class="panel"><h3>Push Press · 1RM stimato e carico reale (kg)</h3><canvas id="report-push-press-1rm"></canvas></div>
+            </div>
+          </section>
+
+          <section class="report-section" aria-labelledby="report-technical-title">
+            <h3 id="report-technical-title" class="report-section-title">AREA TECNICA</h3>
+            <div class="panel report-data-status">
+              <strong id="report-technical-status">Dati tecnici non disponibili</strong>
+              <p>Gli indicatori di partita saranno riepilogati quando sarà configurato il collegamento al database online.</p>
+            </div>
+          </section>
+
+          <section class="report-section" aria-labelledby="report-psychological-title">
+            <h3 id="report-psychological-title" class="report-section-title">AREA PSICOLOGA</h3>
+            <div class="panel report-data-status">
+              <strong id="report-psychological-status">Dati non ancora caricati</strong>
+              <p id="report-psychological-detail">I punteggi iPPS-48 saranno riepilogati quando saranno importati da un foglio di calcolo o dal database online.</p>
+            </div>
+          </section>
+
+          <section class="report-section" aria-labelledby="report-physio-title">
+            <div class="report-print-continuation-brand">
+              <img src="assets/chorus-academy-logo.jpg" alt="" />
+              <span>Chorus Life Volley Bergamo Academy<small>Dashboard report · seguito</small></span>
+            </div>
+            <h3 id="report-physio-title" class="report-section-title">AREA FISIOTERAPICA</h3>
+            <div class="stats-grid report-summary-stats">
+              <article class="stat-card accent-purple"><div class="stat-icon">🩺</div><div><div class="label">Trattamenti</div><div id="report-physio-count" class="value">0</div></div></article>
+              <article class="stat-card accent-orange"><div class="stat-icon">📊</div><div><div class="label">Dolore medio a riposo</div><div id="report-physio-average-pain" class="value">—</div></div></article>
+            </div>
+            <div class="report-grid">
+              <div class="panel physio-summary-panel">
+                <h3>Trattamenti e zone critiche</h3>
+                <p id="physio-treatment-total" class="physio-treatment-total"></p>
+                <ul id="physio-anatomy-breakdown" class="physio-anatomy-breakdown"></ul>
+              </div>
+              <div class="panel"><h3>Cause dei trattamenti</h3><canvas id="physioCauseChart"></canvas></div>
+              <div class="panel"><h3>Trattamenti per mese</h3><canvas id="physioMonthlyChart"></canvas></div>
+            </div>
+          </section>
+          </div>
+
+          <div class="report-actions">
+            <button id="export-pdf-btn" class="primary-btn">📄 Esporta PDF</button>
+            <button id="export-excel-btn" class="secondary-btn">📊 Esporta Excel</button>
+            <button id="export-csv-btn" class="secondary-btn">📊 Esporta CSV</button>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <div id="athlete-modal" class="modal hidden">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h3>Nuova atleta</h3>
+          <button class="close-modal" type="button" aria-label="Chiudi">×</button>
+        </div>
+
+        <form id="athlete-form">
+          <div class="field">
+            <label for="athlete-roster-select">Seleziona atleta dalla rosa</label>
+            <select id="athlete-roster-select" required>
+              <option value="">Seleziona un’atleta</option>
+            </select>
+          </div>
+          <div class="field hidden" id="new-athlete-name-field">
+            <label for="athlete-name">Cognome e Nome nuova atleta</label>
+            <input type="text" id="athlete-name" placeholder="Es. Rossi Sara" />
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label>Data nascita</label>
+              <input type="date" id="athlete-dob" />
+            </div>
+            <div class="field">
+              <label>Squadra</label>
+              <select id="athlete-squad" required>
+                <option value="">Seleziona squadra</option>
+                <option value="U19/17">U19/17</option>
+                <option value="U15">U15</option>
+                <option value="U14">U14</option>
+                <option value="U13">U13</option>
+                <option value="SCUOLA DI PALLAVOLO">SCUOLA DI PALLAVOLO</option>
+              </select>
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label>Ruolo</label>
+              <select id="athlete-role">
+                <option value="">Seleziona ruolo</option>
+                <option value="Palleggiatore">Palleggiatore</option>
+                <option value="Schiacciatore">Schiacciatore</option>
+                <option value="Opposto">Opposto</option>
+                <option value="Libero">Libero</option>
+                <option value="Centrale">Centrale</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Note</label>
+              <input type="text" id="athlete-notes" placeholder="Opzionale" />
+            </div>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="primary-btn">Salva</button>
+            <button type="button" class="secondary-btn close-modal">Annulla</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div id="training-modal" class="modal hidden">
+      <div class="modal-card wide training-modal-card">
+        <div class="modal-header">
+          <h3>Nuovo allenamento</h3>
+          <button class="close-modal" type="button" aria-label="Chiudi">×</button>
+        </div>
+
+        <div class="modal-form-scroll">
+          <form id="training-form">
+            <div class="field-row">
+              <div class="field">
+                <label>Atleta</label>
+                <select id="training-athlete" required></select>
+              </div>
+              <div class="field">
+                <label>Data</label>
+                <input type="date" id="training-date" required />
+              </div>
+            </div>
+
+            <div id="exercise-list"></div>
+
+            <button type="button" id="add-exercise-btn" class="secondary-btn">+ Aggiungi esercizio</button>
+
+            <div class="field">
+              <label>Volume totale</label>
+              <input type="text" id="training-volume" readonly value="0" />
+            </div>
+
+            <div class="field">
+              <label>Note</label>
+              <textarea id="training-notes" rows="3"></textarea>
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" class="primary-btn">Salva allenamento</button>
+              <button type="button" class="secondary-btn close-modal">Annulla</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div id="physio-modal" class="modal hidden">
+      <div class="modal-card wide physio-modal-card">
+        <div class="modal-header">
+          <h3>Nuovo trattamento fisioterapico</h3>
+          <button class="close-modal" type="button" aria-label="Chiudi">×</button>
+        </div>
+
+        <div class="modal-form-scroll">
+          <form id="physio-form">
+          <div class="field-row">
+            <div class="field">
+              <label>Atleta</label>
+              <select id="physio-athlete" required></select>
+            </div>
+            <div class="field">
+              <label>Data visita</label>
+              <input type="date" id="physio-date" required />
+            </div>
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label for="physio-body-part">Parte anatomica</label>
+              <select id="physio-body-part" required>
+                <option value="">Seleziona distretto</option>
+                <optgroup label="Articolazioni e rachide">
+                  <option>Spalla</option><option>Gomito</option><option>Polso/Mano</option>
+                  <option>Anca</option><option>Ginocchio</option><option>Caviglia</option>
+                  <option>Rachide cervicale</option><option>Rachide lombare</option>
+                </optgroup>
+                <optgroup label="Distretti muscolari">
+                  <option>Bicipite brachiale</option><option>Tricipite</option><option>Pettorali</option>
+                  <option>Addominali</option><option>Quadricipite</option><option>Femorali</option>
+                  <option>Polpaccio/Soleo</option><option>Cuffia dei rotatori</option>
+                </optgroup>
+                <option value="Altro">Altro (specificare)</option>
+              </select>
+              <input type="text" id="physio-body-part-other" class="conditional-field hidden" placeholder="Specifica la parte anatomica" />
+            </div>
+            <div class="field">
+              <label for="physio-cause-category">Tipologia causa</label>
+              <select id="physio-cause-category" required>
+                <option value="">Seleziona tipologia</option>
+                <option value="Traumatologica">Traumatologica</option>
+                <option value="Overuse">Da carico iterativo / Overuse</option>
+                <option value="Altro">Altro</option>
+              </select>
+              <label class="visually-hidden" for="physio-cause">Causa specifica</label>
+              <select id="physio-cause" required>
+                <option value="">Seleziona causa</option>
+              </select>
+              <input type="text" id="physio-cause-other" class="conditional-field hidden" placeholder="Specifica la causa" />
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="physio-body-side">Lato interessato (se applicabile)</label>
+            <select id="physio-body-side" required>
+              <option value="Non specificato">Non specificato</option>
+              <option value="Destra">Destra</option>
+              <option value="Sinistra">Sinistra</option>
+              <option value="Bilaterale">Bilaterale</option>
+              <option value="Centrale">Centrale</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="physio-treatment-type">Trattamento indicato</label>
+            <select id="physio-treatment-type" required>
+              <option value="">Seleziona trattamento</option>
+              <option>Terapia manuale</option><option>Tecar</option><option>Dry Needling</option>
+              <option>Esercizio terapeutico/Rinforzo</option><option>Crioterapia</option>
+              <option>Taping Kinesiologico</option><option>Altro</option>
+            </select>
+            <textarea id="physio-treatment" rows="3" required placeholder="Dettagli del trattamento o specifica se hai selezionato Altro"></textarea>
+          </div>
+
+          <fieldset class="pain-assessment">
+            <legend>Valutazione del dolore <span>(1 = minimo · 10 = massimo)</span></legend>
+            <div class="field-row">
+              <div class="field">
+                <label for="physio-pain-rest">Dolore a riposo (1–10)</label>
+                <input id="physio-pain-rest" type="number" min="1" max="10" step="1" inputmode="numeric" required />
+              </div>
+              <div class="field">
+                <label for="physio-pain-training">Dolore durante allenamento (1–10)</label>
+                <input id="physio-pain-training" type="number" min="1" max="10" step="1" inputmode="numeric" required />
+              </div>
+              <div class="field">
+                <label for="physio-pain-after">Dolore dopo allenamento (1–10)</label>
+                <input id="physio-pain-after" type="number" min="1" max="10" step="1" inputmode="numeric" required />
+              </div>
+              <div class="field">
+                <label for="physio-pain-free-minutes">Minuti di allenamento senza dolore</label>
+                <select id="physio-pain-free-minutes" required>
+                  <option value="">Seleziona minuti</option>
+                  <option value="0">0 · Nessun allenamento senza dolore</option>
+                  <option value="5">5 minuti</option><option value="10">10 minuti</option>
+                  <option value="15">15 minuti</option><option value="20">20 minuti</option>
+                  <option value="25">25 minuti</option><option value="30">30 minuti</option>
+                  <option value="35">35 minuti</option><option value="40">40 minuti</option>
+                  <option value="45">45 minuti</option><option value="50">50 minuti</option>
+                  <option value="55">55 minuti</option><option value="60">60 minuti</option>
+                  <option value="75">75 minuti</option><option value="90">90 minuti</option>
+                  <option value="120">120 minuti</option><option value="150">150 minuti</option>
+                  <option value="180">180 minuti</option><option value="240">240 minuti o più</option>
+                </select>
+              </div>
+            </div>
+          </fieldset>
+
+          <div class="field">
+            <label>Esercizi consigliati</label>
+            <textarea id="physio-exercises" rows="3"></textarea>
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label>Giorno controllo</label>
+              <input type="date" id="physio-followup" />
+            </div>
+            <div class="field">
+              <label>Note aggiuntive</label>
+              <input type="text" id="physio-notes" placeholder="Opzionale" />
+            </div>
+          </div>
+
+            <div class="form-actions">
+              <button type="submit" class="primary-btn">Salva</button>
+              <button type="button" class="secondary-btn close-modal">Annulla</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <script src="app.js?v=6"></script>
+  </body>
+</html>
