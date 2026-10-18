@@ -1,1 +1,2789 @@
+:root {
+  color-scheme: light;
+  --bg: #f2f7f9;
+  --bg-soft: #e8f1f5;
+  --panel: #ffffff;
+  --panel-alt: #f7fafc;
+  --border: #d9e5eb;
+  --text: #183447;
+  --muted: #647d8b;
+  --blue: #075a78;
+  --blue-soft: rgba(7, 90, 120, 0.12);
+  --green: #258f91;
+  --purple: #6175a8;
+  --orange: #bf8746;
+  --danger: #c65353;
+  --shadow: 0 12px 30px rgba(13, 54, 73, 0.08);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  min-height: 100%;
+  font-family: Inter, "Segoe UI", sans-serif;
+  background: var(--bg);
+  color: var(--blue);
+}
+
+body {
+  min-height: 100vh;
+}
+
+button, input, select, textarea {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+.app-shell {
+  display: flex;
+  min-height: 100vh;
+}
+
+.sidebar {
+  width: 260px;
+  flex: 0 0 260px;
+  background: linear-gradient(180deg, #082f43 0%, #0a4057 100%);
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 20px 18px;
+  color: #f2f8fa;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 8px 22px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.16);
+  margin-bottom: 22px;
+}
+
+.brand-logo {
+  width: 58px;
+  height: 82px;
+  flex: 0 0 auto;
+  object-fit: contain;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.16);
+}
+
+.brand h1 {
+  margin: 0;
+  font-size: 1.15rem;
+}
+
+.brand p {
+  margin: 4px 0 0;
+  color: #b4ced9;
+  font-size: 0.82rem;
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: transparent;
+  border: 1px solid transparent;
+  color: #deedf2;
+  border-radius: 10px;
+  text-align: left;
+  padding: 11px 13px;
+  transition: background 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
+}
+
+.nav-item:hover, .nav-item.active {
+  background: rgba(82, 177, 202, 0.16);
+  border-color: rgba(150, 218, 232, 0.22);
+}
+
+.nav-item:hover {
+  transform: translateX(2px);
+}
+
+.main-panel {
+  flex: 1;
+  min-width: 0;
+  padding: 28px clamp(20px, 3vw, 44px) 42px;
+  background:
+    radial-gradient(ellipse at 100% 0%, rgba(54, 152, 179, 0.08), transparent 34rem),
+    var(--bg);
+}
+
+.print-brand {
+  display: none;
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2px 0 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 26px;
+}
+
+.topbar h2 {
+  margin: 0;
+  font-size: clamp(1.6rem, 2vw, 2.1rem);
+  color: #103e55;
+  letter-spacing: -0.035em;
+}
+
+.icon-btn, .primary-btn, .secondary-btn {
+  border: none;
+  border-radius: 12px;
+  padding: 10px 16px;
+  font-weight: 700;
+  transition: 0.2s ease;
+}
+
+.icon-btn {
+  width: 42px;
+  height: 42px;
+  background: #fff;
+  color: var(--blue);
+  border: 1px solid var(--border);
+  box-shadow: 0 3px 10px rgba(13, 54, 73, 0.06);
+}
+
+.primary-btn {
+  background: linear-gradient(135deg, #075a78, #087b98);
+  color: white;
+  box-shadow: 0 5px 14px rgba(7, 90, 120, 0.18);
+}
+
+.primary-btn:hover {
+  transform: translateY(-1px);
+}
+
+.secondary-btn {
+  background: #fff;
+  color: var(--text);
+  border: 1px solid #cbdbe3;
+}
+
+.secondary-btn:hover,
+.icon-btn:hover {
+  background: #edf5f7;
+  border-color: #a9c6d2;
+}
+
+.page {
+  display: none;
+}
+
+.page.active {
+  display: block;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.section-header h3 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #123f55;
+  letter-spacing: -0.025em;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 18px;
+  margin-bottom: 22px;
+}
+
+@media (min-width: 1280px) {
+  .stats-grid.overview-stats {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 901px) and (max-width: 1279px) {
+  .stats-grid.overview-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.stat-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px 18px;
+  border-radius: 16px;
+  border: 1px solid #dce7ec;
+  background: var(--panel);
+  box-shadow: 0 5px 18px rgba(15, 59, 78, 0.05);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.stat-card:hover,
+.card:hover,
+.record:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 26px rgba(13, 54, 73, 0.09);
+}
+
+.stat-icon {
+  width: 52px;
+  height: 52px;
+  display: grid;
+  place-items: center;
+  border-radius: 13px;
+  font-size: 1.5rem;
+  color: white;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+.accent-blue .stat-icon { background: linear-gradient(135deg, #075a78, #2589a3); }
+.accent-green .stat-icon { background: linear-gradient(135deg, #258f91, #50b9ae); }
+.accent-purple .stat-icon { background: linear-gradient(135deg, #6175a8, #899abd); }
+.accent-orange .stat-icon { background: linear-gradient(135deg, #bf8746, #d5a76c); }
+
+.label {
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.value {
+  margin-top: 6px;
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #143c51;
+}
+
+.value.small {
+  font-size: 1rem;
+}
+
+.chart-grid, .report-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+  gap: 18px;
+}
+
+.panel {
+  min-width: 0;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 18px;
+  box-shadow: var(--shadow);
+}
+
+.panel h3 {
+  margin: 0 0 14px;
+  font-size: 1.1rem;
+  color: #173f54;
+}
+
+.hidden {
+  display: none !important;
+}
+
+canvas {
+  width: 100% !important;
+  height: 260px !important;
+}
+
+.technical-filters,
+.attendance-filters {
+  align-items: end;
+  margin-bottom: 18px;
+}
+
+.technical-filters .field,
+.attendance-filters .field {
+  min-width: min(100%, 200px);
+}
+
+.technical-kpis,
+.attendance-kpis {
+  margin-bottom: 18px;
+}
+
+.technical-category-breakdown {
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+
+.technical-charts {
+  display: grid;
+  gap: 18px;
+  margin-bottom: 24px;
+}
+
+.technical-group {
+  min-width: 0;
+}
+
+.technical-group > h3 {
+  margin-bottom: 18px;
+  color: var(--blue);
+  letter-spacing: 0.08em;
+  font-size: 0.95rem;
+}
+
+.technical-group-charts {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+}
+
+.technical-group {
+  border-top: 3px solid #087b98;
+}
+
+.technical-group:nth-child(2) {
+  border-top-color: #477d95;
+}
+
+.technical-group-charts .panel {
+  background: var(--panel-alt);
+  box-shadow: none;
+  border-color: #e1ebef;
+}
+
+.technical-chart-wrap,
+.attendance-donut-wrap {
+  position: relative;
+  height: 260px;
+}
+
+.attendance-donut-wrap {
+  max-width: 360px;
+  margin: 0 auto;
+}
+
+.sub-section-header {
+  margin: 24px 0 14px;
+}
+
+.entry-form {
+  margin-bottom: 20px;
+}
+
+.form-hint {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
+.attendance-chart-panel {
+  margin-bottom: 18px;
+}
+
+.attendance-table-wrap {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.attendance-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.attendance-table th,
+.attendance-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+}
+
+.attendance-table th {
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
+.attendance-table tbody th {
+  color: var(--text);
+}
+
+.attendance-table select {
+  min-width: 145px;
+}
+
+.physio-treatment-total {
+  margin: 8px 0 16px;
+  color: var(--purple);
+  font-size: 1.8rem;
+  font-weight: 800;
+}
+
+.physio-anatomy-breakdown {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.physio-anatomy-breakdown li {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  color: var(--muted);
+  background: #f7fafc;
+}
+
+.physio-anatomy-breakdown strong {
+  color: var(--text);
+}
+
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+  gap: 18px;
+}
+
+.card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: var(--shadow);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.card h4 {
+  margin: 0;
+  font-size: 1.15rem;
+}
+
+.badge {
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #e8f3f6;
+  color: #075a78;
+  border: 1px solid #d1e5eb;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.meta-list {
+  display: grid;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.notes {
+  margin-top: 14px;
+  color: var(--muted);
+  line-height: 1.5;
+  font-size: 0.92rem;
+}
+
+.list-stack {
+  display: grid;
+  gap: 14px;
+}
+
+.record {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 16px 18px;
+  box-shadow: var(--shadow);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.record-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.record-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.record-header h4 {
+  margin: 0;
+}
+
+.kpi {
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #e8f5f1;
+  border: 1px solid #cce7df;
+  color: #276e68;
+  font-size: 0.73rem;
+  font-weight: 700;
+}
+
+.meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  color: var(--muted);
+  font-size: 0.8rem;
+  margin-bottom: 10px;
+}
+
+.exercise-list,
+.text-block {
+  color: #385565;
+  line-height: 1.65;
+  font-size: 0.93rem;
+}
+
+.filters-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+}
+
+.filters-row .field {
+  flex: 1 1 180px;
+  min-width: min(100%, 180px);
+}
+
+.filters-row button,
+.filters-row .secondary-btn {
+  min-height: 42px;
+  align-self: flex-end;
+}
+
+.performance-kpis {
+  margin-top: -4px;
+  align-items: center;
+}
+
+.dashboard-filter-hint {
+  margin: -12px 0 18px;
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.dashboard-export {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.exercise-performance-grid {
+  display: grid;
+  gap: 18px;
+}
+
+.exercise-group {
+  border-top: 3px solid #087b98;
+}
+
+.exercise-group:nth-child(2) {
+  border-top-color: #477d95;
+}
+
+.exercise-group > h3 {
+  margin: 0 0 16px;
+  color: #075a78;
+  font-size: 0.95rem;
+  letter-spacing: 0.08em;
+}
+
+.exercise-group-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.exercise-performance-card {
+  min-width: 0;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.exercise-performance-card.is-focused {
+  border-color: var(--orange);
+  box-shadow: 0 0 0 2px rgba(191, 135, 70, 0.18), var(--shadow);
+}
+
+.exercise-performance-heading,
+.body-map-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.exercise-performance-heading h3,
+.body-map-header h3 {
+  margin-bottom: 4px;
+}
+
+.exercise-one-rm {
+  color: var(--green);
+  font-weight: 700;
+  font-size: 0.82rem;
+  text-align: right;
+}
+
+.exercise-charts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 12px;
+}
+
+.exercise-charts h4 {
+  min-height: 2.3em;
+  margin: 0 0 6px;
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.exercise-charts canvas {
+  height: 190px !important;
+}
+
+.physio-analytics-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  margin-bottom: 20px;
+}
+
+.physio-kpi-panel {
+  display: grid;
+  align-content: start;
+  gap: 8px;
+}
+
+.physio-kpi-panel .physio-treatment-total {
+  margin: 0 0 8px;
+  font-size: clamp(1.35rem, 2.4vw, 2rem);
+}
+
+.physio-header-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.physio-anatomy-breakdown li {
+  background: #f7fafc;
+}
+
+.physio-anatomy-breakdown li strong {
+  min-width: 2.5ch;
+  text-align: right;
+}
+
+.chart-empty-note {
+  color: var(--muted);
+  text-align: center;
+}
+
+.body-map-panel {
+  min-width: 0;
+}
+
+.body-map-header p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.body-map-tabs {
+  display: flex;
+  gap: 6px;
+  padding: 4px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #f6fafb;
+}
+
+.body-map-tab {
+  border: 0;
+  border-radius: 8px;
+  padding: 8px 12px;
+  color: var(--text);
+  background: transparent;
+}
+
+.body-map-tab.active {
+  color: #fff;
+  background: var(--blue);
+}
+
+.body-map-content {
+  display: flex;
+  justify-content: center;
+  min-height: 350px;
+  padding: 10px;
+}
+
+.body-map-svg {
+  width: min(100%, 250px);
+  height: 350px;
+  overflow: visible;
+}
+
+.body-silhouette {
+  fill: #e4eaf2;
+  stroke: #94a3b8;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.body-detail {
+  fill: none;
+  stroke: #94a3b8;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.body-detail-dot {
+  fill: #94a3b8;
+}
+
+.body-zone {
+  cursor: pointer;
+  stroke: #334155;
+  stroke-width: 1.5;
+  transition: fill 0.2s ease, stroke-width 0.2s ease, filter 0.2s ease;
+}
+
+.body-zone:hover,
+.body-zone:focus,
+.body-zone.selected {
+  stroke: #fff;
+  stroke-width: 3;
+  filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.8));
+  outline: none;
+}
+
+.body-map-detail {
+  min-height: 1.5em;
+  margin: 0;
+  text-align: center;
+  color: var(--muted);
+}
+
+.pain-legend {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 12px;
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.pain-gradient {
+  width: min(220px, 35vw);
+  height: 12px;
+  border-radius: 99px;
+  background: linear-gradient(90deg, #36c890, #8b0000);
+}
+
+.pain-assessment {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+}
+
+.pain-assessment legend {
+  padding: 0 8px;
+  font-weight: 700;
+}
+
+.pain-assessment legend span {
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 400;
+}
+
+.conditional-field.hidden {
+  display: none;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+select, input, textarea {
+  border: 1px solid #cbdbe3;
+  background: #fff;
+  color: var(--text);
+  border-radius: 10px;
+  padding: 10px 12px;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+select {
+  background-color: #fff;
+  color: var(--text);
+}
+
+select option {
+  background-color: #fff;
+  color: var(--text);
+}
+
+select:focus,
+input:focus,
+textarea:focus {
+  border-color: #1785a0;
+  box-shadow: 0 0 0 3px rgba(23, 133, 160, 0.13);
+  outline: none;
+}
+
+input, select {
+  min-height: 42px;
+}
+
+.date-display {
+  position: relative;
+  display: block;
+}
+
+.date-display input[type="date"] {
+  width: 100%;
+  color: transparent;
+  cursor: pointer;
+}
+
+.date-display input[type="date"]::-webkit-datetime-edit {
+  color: transparent;
+}
+
+.date-display-text {
+  position: absolute;
+  left: 13px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: var(--text);
+}
+
+.date-display-text.empty {
+  color: var(--muted);
+}
+
+textarea {
+  resize: vertical;
+}
+
+.modal {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(8, 39, 55, 0.54);
+  z-index: 200;
+}
+
+.modal.hidden {
+  display: none;
+}
+
+.modal-card {
+  width: min(calc(100vw - 32px), 540px);
+  max-height: calc(100vh - 32px);
+  overflow-y: auto;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 18px;
+  box-shadow: var(--shadow);
+}
+
+.modal-card.wide {
+  width: min(calc(100vw - 32px), 820px);
+}
+
+.training-modal-card {
+  display: flex;
+  flex-direction: column;
+  max-height: 90vh;
+}
+
+.physio-modal-card {
+  display: flex;
+  flex-direction: column;
+  max-height: 90vh;
+}
+
+.modal-form-scroll {
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+
+.modal-header h3 {
+  margin: 0;
+}
+
+.close-modal {
+  background: transparent;
+  border: none;
+  color: var(--text);
+  font-size: 2rem;
+  line-height: 1;
+}
+
+form {
+  display: grid;
+  gap: 16px;
+}
+
+.field {
+  display: grid;
+  gap: 8px;
+  flex: 1;
+}
+
+.field-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+label {
+  font-weight: 600;
+  color: #315367;
+  font-size: 0.9rem;
+}
+
+#exercise-list {
+  display: grid;
+  gap: 16px;
+}
+
+.exercise-block {
+  border: 1px solid var(--border);
+  background: #f8fbfc;
+  border-radius: 14px;
+  padding: 16px;
+}
+
+.exercise-block-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.exercise-rest-field {
+  display: none;
+}
+
+.schedule-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin: 14px 0;
+}
+
+.schedule-range {
+  margin-left: 8px;
+  text-transform: capitalize;
+  color: var(--blue);
+}
+
+.schedule-grid {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  overflow-x: auto;
+}
+
+.schedule-head,
+.schedule-week {
+  display: grid;
+  grid-template-columns: 44px repeat(7, minmax(0, 1fr));
+  min-width: 860px;
+}
+
+.schedule-head {
+  background: var(--blue);
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+.schedule-head span {
+  padding: 10px 12px;
+}
+
+.schedule-week {
+  border-top: 1px solid var(--border);
+}
+
+.schedule-week-label {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  text-align: center;
+  padding: 8px 0;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--muted);
+  background: var(--panel-alt);
+}
+
+.schedule-day {
+  min-height: 130px;
+  padding: 8px;
+  border-left: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.schedule-day.dim {
+  background: var(--panel-alt);
+  opacity: 0.6;
+}
+
+.schedule-day.today {
+  background: var(--blue-soft);
+}
+
+.schedule-day-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+.schedule-day.today .schedule-day-head span {
+  background: var(--blue);
+  color: #fff;
+  border-radius: 999px;
+  padding: 1px 9px;
+}
+
+.schedule-add-day {
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+  opacity: 0;
+}
+
+.schedule-day:hover .schedule-add-day,
+.schedule-add-day:focus {
+  opacity: 1;
+}
+
+.schedule-card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--card-color, var(--blue));
+  border-radius: 10px;
+  padding: 8px 10px;
+  font-size: 0.82rem;
+}
+
+.schedule-card h5 {
+  margin: 0 0 6px;
+  font-size: 0.88rem;
+  color: var(--card-color, var(--blue));
+}
+
+.schedule-card ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 4px;
+}
+
+.schedule-card li {
+  display: flex;
+  flex-direction: column;
+}
+
+.schedule-card li span,
+.schedule-note {
+  color: var(--muted);
+}
+
+.schedule-note {
+  margin: 6px 0 0;
+  font-style: italic;
+}
+
+.schedule-card details {
+  margin-top: 8px;
+}
+
+.schedule-card summary {
+  cursor: pointer;
+  color: var(--blue);
+  font-weight: 600;
+}
+
+.schedule-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 6px;
+}
+
+.schedule-chip {
+  border: 1px solid var(--border);
+  background: var(--panel-alt);
+  border-radius: 999px;
+  padding: 2px 8px;
+  font-size: 0.75rem;
+  cursor: pointer;
+}
+
+.schedule-chip:hover {
+  background: var(--blue-soft);
+}
+
+.editing-workout .exercise-rest-field {
+  display: block;
+  margin-top: 12px;
+}
+
+.assign-box {
+  border: 1px solid var(--border);
+  background: var(--panel-alt);
+  border-radius: 14px;
+  padding: 14px 16px;
+  margin-bottom: 16px;
+}
+
+.assign-title {
+  display: block;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.assign-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+}
+
+.assign-option {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.92rem;
+  cursor: pointer;
+}
+
+.assign-option input,
+.assign-group-title input {
+  width: auto;
+  margin: 0;
+}
+
+.assign-panel {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px dashed var(--border);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+}
+
+#training-athletes-panel {
+  display: block;
+  max-height: 240px;
+  overflow-y: auto;
+}
+
+#training-athletes-panel.hidden,
+#training-squads-panel.hidden {
+  display: none;
+}
+
+.period-layout {
+  display: grid;
+  grid-template-columns: 280px minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+
+.period-sidebar,
+.period-main {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px;
+}
+
+.period-sidebar-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 8px 0;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+#period-exercises {
+  display: grid;
+  gap: 6px;
+  max-height: 460px;
+  overflow-y: auto;
+}
+
+.period-exercise {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.period-exercise.selected {
+  border-color: var(--blue);
+  background: var(--panel-alt);
+}
+
+.period-exercise small {
+  display: block;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.period-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 12px;
+}
+
+.period-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.period-tab {
+  border: 1px solid var(--border);
+  background: #fff;
+  border-radius: 999px;
+  padding: 7px 14px;
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--blue);
+}
+
+.period-tab.active {
+  background: var(--blue);
+  color: #fff;
+  border-color: var(--blue);
+}
+
+.period-chart-wrap {
+  position: relative;
+  height: 340px;
+}
+
+.period-chart-wrap.hidden {
+  display: none;
+}
+
+.period-cards {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  margin-top: 14px;
+  padding-bottom: 6px;
+}
+
+.period-card {
+  min-width: 170px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px;
+  background: var(--panel-alt);
+}
+
+.period-card h5 {
+  margin: 0 0 8px;
+  color: var(--blue);
+}
+
+.period-card-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+.period-card-row i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex: none;
+}
+
+.period-card-row span {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.period-editor {
+  margin-top: 16px;
+  border-top: 1px solid var(--border);
+  padding-top: 14px;
+}
+
+.period-editor.hidden {
+  display: none;
+}
+
+.period-editor-head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.period-editor-head small,
+.period-editor-note {
+  display: block;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.period-step {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.period-step-btn {
+  border: 1px solid var(--border);
+  background: #fff;
+  border-radius: 8px;
+  min-width: 40px;
+  padding: 6px 10px;
+  cursor: pointer;
+  font-weight: 700;
+  color: var(--blue);
+}
+
+.period-step-btn.active {
+  background: var(--blue);
+  color: #fff;
+  border-color: var(--blue);
+}
+
+.period-editor-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.period-legend {
+  font-size: 12px;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.period-legend i {
+  width: 18px;
+  height: 0;
+  border-top: 2px dashed #8a9aa3;
+}
+
+.period-legend i.draft {
+  border-top: 3px solid var(--blue);
+}
+
+.period-steps {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+}
+
+.period-step-col {
+  min-width: 110px;
+  flex: 1 0 110px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #fff;
+  overflow: hidden;
+}
+
+.period-step-col.modified {
+  border-color: var(--blue);
+}
+
+.period-step-label {
+  text-align: center;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px;
+  color: var(--blue);
+  background: var(--panel-alt);
+}
+
+.period-arrows {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.period-arrows button {
+  border: 0;
+  background: #fff;
+  cursor: pointer;
+  padding: 6px 0;
+  font-size: 15px;
+  color: var(--blue);
+}
+
+.period-arrows button:hover {
+  background: var(--panel-alt);
+}
+
+.period-arrows button + button {
+  border-left: 1px solid var(--border);
+}
+
+.period-step-values {
+  padding: 6px 8px;
+  font-size: 12px;
+  font-family: ui-monospace, Consolas, monospace;
+  background: var(--panel-alt);
+  min-height: 48px;
+}
+
+.period-step-values div {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.period-step-values i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex: none;
+}
+
+.period-step-values .changed {
+  color: var(--blue);
+  font-weight: 700;
+}
+
+.period-step-values small {
+  color: var(--blue);
+}
+
+.period-modes {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.period-mode {
+  border: 1px solid var(--border);
+  background: #fff;
+  border-radius: 10px;
+  padding: 10px 18px;
+  font-weight: 700;
+  color: var(--blue);
+  cursor: pointer;
+}
+
+.period-mode.active {
+  background: var(--blue);
+  color: #fff;
+  border-color: var(--blue);
+}
+
+.ipi-panel {
+  display: grid;
+  gap: 14px;
+}
+
+.ipi-panel.hidden {
+  display: none;
+}
+
+.ipi-intro small,
+.ipi-note,
+.ipi-disclaimer {
+  display: block;
+  color: var(--muted);
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+.ipi-setup {
+  display: grid;
+  gap: 10px;
+}
+
+.ipi-box {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+
+.ipi-box summary {
+  cursor: pointer;
+  font-weight: 700;
+  color: var(--blue);
+}
+
+.ipi-count {
+  color: var(--muted);
+  font-weight: 400;
+}
+
+.ipi-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: flex-end;
+  margin: 12px 0;
+}
+
+.ipi-list {
+  overflow-x: auto;
+}
+
+.ipi-list-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.ipi-hero {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.ipi-hero h4 {
+  margin: 0 0 4px;
+}
+
+.ipi-hero p {
+  margin: 0 0 6px;
+}
+
+.ipi-squad {
+  color: var(--muted);
+  font-weight: 400;
+  font-size: 13px;
+}
+
+.ipi-reliab {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.ipi-score {
+  min-width: 110px;
+  text-align: center;
+  font-size: 44px;
+  font-weight: 800;
+  border-radius: 12px;
+  padding: 10px 8px;
+  color: #fff;
+  background: #8a9aa3;
+}
+
+.ipi-score small {
+  font-size: 14px;
+  font-weight: 600;
+  opacity: 0.85;
+}
+
+.ipi-band-high { background: #258f91; }
+.ipi-band-mid { background: var(--blue); }
+.ipi-band-low { background: #bf8746; }
+.ipi-band-bad { background: #c65353; }
+.ipi-band-high-text { color: #258f91; }
+.ipi-band-mid-text { color: var(--blue); }
+.ipi-band-low-text { color: #bf8746; }
+.ipi-band-bad-text { color: #c65353; }
+
+.ipi-chart-wrap {
+  position: relative;
+  height: 260px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.ipi-table-wrap {
+  overflow-x: auto;
+}
+
+.ipi-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--panel);
+  font-size: 13px;
+}
+
+.ipi-table th,
+.ipi-table td {
+  padding: 7px 9px;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+}
+
+.ipi-table th {
+  background: var(--panel-alt);
+  color: var(--blue);
+}
+
+.ipi-table .num {
+  text-align: center;
+}
+
+.ipi-note-cell {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.ipi-clickable tbody tr {
+  cursor: pointer;
+}
+
+.ipi-clickable tbody tr:hover {
+  background: var(--panel-alt);
+}
+
+.ipi-kind {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  white-space: nowrap;
+  background: var(--panel-alt);
+  color: var(--blue);
+}
+
+.ipi-kind-stimato { background: #f6e8d3; color: #8a5a1c; }
+.ipi-kind-mancante { background: #e8ecee; color: #6b7a82; }
+
+.ipi-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 10px;
+}
+
+.ipi-two {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 10px;
+}
+
+.ipi-card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-size: 13px;
+}
+
+.ipi-card h5 {
+  margin: 0 0 8px;
+  color: var(--blue);
+}
+
+.ipi-card ul {
+  margin: 0;
+  padding-left: 18px;
+}
+
+.ipi-card.good { border-left: 4px solid #258f91; }
+.ipi-card.risk { border-left: 4px solid #c65353; }
+.ipi-card.practical { border-left: 4px solid var(--blue); }
+
+@media (max-width: 900px) {
+  .period-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.assign-group + .assign-group {
+  margin-top: 10px;
+}
+
+.assign-group-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 700;
+  color: var(--blue);
+  margin-bottom: 6px;
+  cursor: pointer;
+}
+
+.assign-athlete-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 6px 12px;
+}
+
+.assign-count,
+.assign-summary {
+  color: var(--muted);
+}
+
+.assign-summary {
+  margin: 10px 0 0;
+  font-size: 0.85rem;
+}
+
+.exercise-block-header h4 {
+  margin: 0;
+}
+
+.remove-exercise {
+  background: #fff1f0;
+  border: 1px solid #f0d0cc;
+  color: #a9433a;
+  border-radius: 10px;
+  padding: 8px 10px;
+}
+
+.form-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+
+.empty-state {
+  border: 1px dashed var(--border);
+  border-radius: 16px;
+  padding: 30px 18px;
+  text-align: center;
+  color: var(--muted);
+  background: #f8fbfc;
+}
+
+.report-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 18px;
+}
+
+.report-selector {
+  align-items: flex-end;
+  margin-bottom: 18px;
+}
+
+.report-selector .field {
+  min-width: min(100%, 220px);
+}
+
+.report-cover {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(220px, 0.7fr) 150px;
+  align-items: center;
+  gap: 22px;
+  margin-bottom: 24px;
+  border-top: 4px solid var(--blue);
+}
+
+.report-eyebrow {
+  color: var(--green);
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.report-cover h3 {
+  margin: 8px 0;
+  color: #123f55;
+  font-size: 1.35rem;
+}
+
+.report-cover p,
+.report-muted {
+  margin: 0;
+  color: var(--muted);
+}
+
+.report-photo-control {
+  display: grid;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.report-photo-control input {
+  width: 100%;
+  max-width: 280px;
+  color: var(--text);
+}
+
+.report-photo-frame {
+  display: grid;
+  place-items: center;
+  width: 150px;
+  height: 170px;
+  margin: 0;
+  overflow: hidden;
+  border: 2px dashed #9ab5c0;
+  border-radius: 12px;
+  background: #f7fafc;
+  color: var(--muted);
+  text-align: center;
+  font-size: 0.82rem;
+}
+
+.report-photo-frame img:not([hidden]) {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.report-section {
+  margin-top: 26px;
+}
+
+.report-dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.report-dashboard-grid > .report-section {
+  grid-column: span 12;
+  min-width: 0;
+  margin-top: 0;
+}
+
+.report-dashboard-grid > .report-section[aria-labelledby="report-technical-title"],
+.report-dashboard-grid > .report-section[aria-labelledby="report-psychological-title"] {
+  grid-column: span 6;
+}
+
+.report-section-title {
+  margin: 0 0 14px;
+  padding: 10px 14px;
+  border: 0;
+  border-left: 4px solid var(--green);
+  border-radius: 0 8px 8px 0;
+  background: linear-gradient(90deg, #e8f1f5, rgba(232, 241, 245, 0));
+  color: #075a78;
+  font-size: 1.12rem;
+  letter-spacing: 0.06em;
+}
+
+.report-summary-stats {
+  grid-template-columns: repeat(auto-fit, minmax(185px, 1fr));
+}
+
+.report-exercise-charts {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.report-exercise-charts .panel h3 {
+  min-height: 2.6em;
+}
+
+.report-value-compact {
+  font-size: 1.35rem;
+}
+
+.report-attendance-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 18px;
+}
+
+.report-attendance-summary h3 {
+  margin-bottom: 6px;
+}
+
+.report-attendance-chart-wrap {
+  width: 80px;
+  height: 80px;
+  flex: 0 0 80px;
+}
+
+.report-attendance-chart-wrap canvas {
+  height: 80px !important;
+}
+
+.report-data-status p {
+  margin: 8px 0 0;
+  color: var(--muted);
+}
+
+.report-print-continuation-brand {
+  display: none;
+}
+
+.psychological-filters {
+  align-items: end;
+  margin-bottom: 18px;
+}
+
+.psychological-filters .field {
+  min-width: min(100%, 240px);
+}
+
+.ipps48-panel {
+  padding: clamp(18px, 2.5vw, 30px);
+  border-top: 4px solid var(--blue);
+}
+
+.ipps48-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 18px;
+}
+
+.ipps48-heading h3 {
+  margin: 8px 0;
+  color: #123f55;
+  font-size: 1.35rem;
+}
+
+.ipps48-badge {
+  flex: 0 0 auto;
+  padding: 7px 11px;
+  border: 1px solid #c9dce3;
+  border-radius: 999px;
+  background: #f2f7f9;
+  color: var(--blue);
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+}
+
+.ipps48-chart-wrap {
+  min-height: 360px;
+}
+
+.ipps48-chart-wrap canvas {
+  height: 360px !important;
+}
+
+.ipps48-chart-wrap .empty-state {
+  margin: 0;
+}
+
+.ipps48-footnote {
+  margin: 12px 0 0;
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+@media (max-width: 900px) {
+  .report-cover {
+    grid-template-columns: minmax(0, 1fr) 150px;
+  }
+
+  .report-dashboard-grid > .report-section[aria-labelledby="report-technical-title"],
+  .report-dashboard-grid > .report-section[aria-labelledby="report-psychological-title"] {
+    grid-column: span 12;
+  }
+
+  .report-photo-control {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .report-photo-frame {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+  }
+
+  .app-shell {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .nav-item {
+    flex: 1 1 150px;
+  }
+
+  .field-row {
+    grid-template-columns: 1fr;
+  }
+
+  .exercise-performance-grid,
+  .physio-analytics-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .exercise-group-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .body-map-panel {
+    grid-column: auto;
+  }
+}
+
+@media (max-width: 760px) {
+  .ipps48-heading {
+    flex-direction: column;
+  }
+
+  .ipps48-chart-wrap,
+  .ipps48-chart-wrap canvas {
+    min-height: 320px;
+    height: 320px !important;
+  }
+
+  .report-cover {
+    grid-template-columns: 1fr;
+  }
+
+  .report-attendance-summary {
+    align-items: flex-start;
+  }
+
+  .report-photo-control,
+  .report-photo-frame {
+    grid-column: 1;
+    grid-row: auto;
+  }
+
+  .main-panel {
+    padding: 18px 18px 28px;
+  }
+
+  .section-header {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .physio-header-actions {
+    justify-content: flex-start;
+  }
+
+  .dashboard-filters > select,
+  .dashboard-filters > input,
+  .filters-row:not(.dashboard-filters) > select,
+  .filters-row:not(.dashboard-filters) > input {
+    flex: 1 1 180px;
+    min-width: 0;
+  }
+
+  .exercise-charts {
+    grid-template-columns: 1fr;
+  }
+
+  .exercise-charts h4 {
+    min-height: 0;
+  }
+}
+
+@media (max-width: 560px) {
+  .main-panel {
+    padding: 14px 12px 24px;
+  }
+
+  .sidebar {
+    padding: 14px 12px 10px;
+  }
+
+  .brand {
+    gap: 10px;
+    padding: 4px 4px 14px;
+    margin-bottom: 14px;
+  }
+
+  .brand-logo {
+    width: 44px;
+    height: 62px;
+  }
+
+  .brand h1 {
+    font-size: 1rem;
+  }
+
+  .brand p {
+    font-size: 0.76rem;
+  }
+
+  .nav {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    gap: 8px;
+    padding: 0 0 6px;
+    scrollbar-width: thin;
+  }
+
+  .nav-item {
+    flex: 0 0 auto;
+    white-space: nowrap;
+    padding: 10px 12px;
+  }
+
+  .topbar {
+    padding-bottom: 16px;
+    margin-bottom: 16px;
+  }
+
+  .topbar h2 {
+    font-size: 1.5rem;
+  }
+
+  .section-header,
+  .record-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .section-header > button,
+  .physio-header-actions,
+  .physio-header-actions button {
+    width: 100%;
+  }
+
+  .physio-header-actions {
+    justify-content: stretch;
+  }
+
+  .stats-grid.overview-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .overview-stats .stat-card {
+    gap: 10px;
+    padding: 12px 10px;
+    border-radius: 14px;
+  }
+
+  .overview-stats .stat-icon {
+    width: 38px;
+    height: 38px;
+    flex: 0 0 38px;
+    font-size: 1.1rem;
+  }
+
+  .overview-stats .label {
+    font-size: 0.72rem;
+  }
+
+  .overview-stats .value {
+    font-size: 1.4rem;
+  }
+
+  .overview-stats .value.small {
+    font-size: 0.85rem;
+  }
+
+  .record-actions {
+    flex-wrap: wrap;
+  }
+
+  .record {
+    padding: 14px;
+  }
+
+  .filters-row > select,
+  .filters-row > input,
+  .filters-row > button {
+    width: 100%;
+  }
+
+  .exercise-charts {
+    grid-template-columns: 1fr;
+  }
+
+  .exercise-charts h4 {
+    min-height: 0;
+  }
+
+  .exercise-performance-heading,
+  .body-map-header {
+    flex-direction: column;
+  }
+
+  .dashboard-export {
+    justify-content: stretch;
+  }
+
+  .dashboard-export button {
+    flex: 1 1 100%;
+  }
+
+  .body-map-content {
+    min-height: 300px;
+    padding: 8px 0;
+  }
+
+  .body-map-svg {
+    height: 300px;
+  }
+
+  .pain-assessment {
+    padding: 12px;
+  }
+
+  .pain-assessment legend {
+    max-width: 100%;
+    font-size: 0.9rem;
+  }
+
+  .pain-assessment legend span {
+    display: block;
+  }
+
+  .modal {
+    align-items: flex-start;
+    padding: 16px 0;
+    overflow-y: auto;
+  }
+
+  .modal-card,
+  .modal-card.wide {
+    width: calc(100% - 24px);
+    max-height: calc(100vh - 32px);
+    padding: 14px;
+    border-radius: 16px;
+  }
+
+  .form-actions > button {
+    flex: 1 1 100%;
+  }
+}
+
+@page {
+  size: A4 landscape;
+  margin: 9mm;
+}
+
+@media print {
+  :root {
+    --text: #111;
+    --muted: #444;
+    --border: #d4dbe4;
+    --panel: #fff;
+    --panel-alt: #fff;
+  }
+
+  html, body {
+    background: #fff;
+    color: #111;
+  }
+
+  .sidebar,
+  .topbar-actions,
+  .section-header button,
+  .report-actions,
+  .filters-row,
+  .modal {
+    display: none !important;
+  }
+
+  .app-shell {
+    display: block;
+  }
+
+  .main-panel {
+    padding: 0;
+  }
+
+  .print-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 54px;
+    margin-bottom: 10px;
+    padding: 7px 14px;
+    border-radius: 8px;
+    background: #08394f;
+    color: #fff;
+    font-size: 16px;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .print-brand img {
+    width: 30px;
+    height: 40px;
+    object-fit: contain;
+    border-radius: 4px;
+    background: #fff;
+  }
+
+  body.printing-report .topbar {
+    display: none !important;
+  }
+
+  body.printing-report #reports > .section-header {
+    display: none !important;
+  }
+
+  .topbar {
+    border-color: #d4dbe4;
+  }
+
+  .panel,
+  .stat-card,
+  .record,
+  .card {
+    color: #111;
+    background: #fff;
+    box-shadow: none;
+    break-inside: avoid;
+  }
+
+  .report-grid,
+  .stats-grid {
+    gap: 10px;
+  }
+
+  body.printing-report #reports {
+    color: #183447;
+    font-size: 9pt;
+  }
+
+  body.printing-report .report-cover {
+    grid-template-columns: minmax(0, 1fr) 34mm;
+    gap: 12px;
+    min-height: 34mm;
+    margin: 0 0 10px;
+    padding: 9px 13px;
+    border: 1px solid #c8d9e0;
+    border-top: 4px solid #075a78;
+    border-radius: 8px;
+    background: #f2f7f9;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  body.printing-report .report-eyebrow {
+    color: #258f91;
+    font-size: 7pt;
+  }
+
+  body.printing-report .report-cover h3 {
+    margin: 5px 0;
+    color: #103e55;
+    font-size: 18pt;
+  }
+
+  body.printing-report .report-cover p {
+    font-size: 9pt;
+  }
+
+  body.printing-report .report-photo-frame {
+    grid-column: 2;
+    grid-row: 1;
+    width: 34mm;
+    height: 34mm;
+    border: 1px solid #91aeba;
+    border-radius: 6px;
+    background: #fff;
+    font-size: 8pt;
+  }
+
+  body.printing-report .report-dashboard-grid {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  body.printing-report .report-dashboard-grid > .report-section {
+    grid-column: span 12;
+    margin: 0;
+    break-inside: avoid;
+  }
+
+  body.printing-report .report-dashboard-grid > .report-section[aria-labelledby="report-technical-title"],
+  body.printing-report .report-dashboard-grid > .report-section[aria-labelledby="report-psychological-title"] {
+    grid-column: span 6;
+  }
+
+  body.printing-report .report-section-title {
+    margin: 0 0 6px;
+    padding: 4px 8px;
+    border-left-width: 3px;
+    border-radius: 0 4px 4px 0;
+    background: #e8f1f5;
+    color: #075a78;
+    font-size: 9pt;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  body.printing-report .report-summary-stats {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 6px;
+    margin: 0 0 7px;
+  }
+
+  body.printing-report .report-summary-stats .stat-card {
+    min-height: 42px;
+    gap: 7px;
+    padding: 6px 8px;
+    border-color: #d9e5eb;
+    border-radius: 6px;
+  }
+
+  body.printing-report .report-summary-stats .stat-icon {
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
+    font-size: 11pt;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  body.printing-report .report-summary-stats .label {
+    font-size: 7pt;
+  }
+
+  body.printing-report .report-summary-stats .value,
+  body.printing-report .report-summary-stats .report-value-compact {
+    margin-top: 2px;
+    color: #143c51;
+    font-size: 12pt;
+  }
+
+  body.printing-report .report-attendance-summary {
+    min-height: 44px;
+    margin: 0;
+    padding: 7px 10px;
+    border-radius: 6px;
+  }
+
+  body.printing-report .report-attendance-summary h3,
+  body.printing-report .report-grid .panel h3 {
+    margin-bottom: 4px;
+    font-size: 8pt;
+  }
+
+  body.printing-report .report-attendance-summary p {
+    font-size: 7pt;
+  }
+
+  body.printing-report .report-attendance-chart-wrap,
+  body.printing-report .report-attendance-chart-wrap canvas {
+    width: 34px !important;
+    height: 34px !important;
+    flex-basis: 34px;
+  }
+
+  body.printing-report .report-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 7px;
+  }
+
+  body.printing-report .report-grid .panel {
+    padding: 8px;
+    border-color: #d9e5eb;
+    border-radius: 6px;
+  }
+
+  body.printing-report .report-grid canvas {
+    height: 88px !important;
+    max-height: 88px;
+  }
+
+  body.printing-report .report-exercise-charts {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  body.printing-report .report-exercise-charts .panel h3 {
+    min-height: 0;
+  }
+
+  body.printing-report .report-exercise-charts canvas {
+    height: 125px !important;
+    max-height: 125px;
+  }
+
+  body.printing-report .report-dashboard-grid > .report-section[aria-labelledby="report-physio-title"] .report-grid {
+    grid-template-columns: 1.15fr 1fr 1fr;
+  }
+
+  body.printing-report .report-dashboard-grid > .report-section[aria-labelledby="report-physio-title"] .report-grid canvas {
+    height: 100px !important;
+    max-height: 100px;
+  }
+
+  body.printing-report .report-data-status {
+    min-height: 42px;
+    padding: 8px 10px;
+    border-radius: 6px;
+    font-size: 8pt;
+  }
+
+  body.printing-report .report-data-status p {
+    margin-top: 3px;
+    font-size: 7pt;
+  }
+
+  body.printing-report .physio-anatomy-breakdown {
+    max-height: 78px;
+    overflow: hidden;
+  }
+
+  body.printing-report .report-print-continuation-brand {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin: 0 0 8px;
+    padding: 6px 10px;
+    border-radius: 6px;
+    background: #08394f;
+    color: #fff;
+    font-size: 9pt;
+    font-weight: 700;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  body.printing-report .report-print-continuation-brand img {
+    width: 23px;
+    height: 30px;
+    object-fit: contain;
+    border-radius: 3px;
+    background: #fff;
+  }
+
+  body.printing-report .report-print-continuation-brand small {
+    display: block;
+    margin-top: 2px;
+    color: #c7dbe3;
+    font-size: 7pt;
+    font-weight: 400;
+  }
+
+  body.printing-report .report-dashboard-grid > .report-section[aria-labelledby="report-physio-title"] {
+    break-before: page;
+  }
+
+  body.printing-dashboard .sidebar,
+  body.printing-dashboard .topbar-actions,
+  body.printing-dashboard .dashboard-filters,
+  body.printing-dashboard .dashboard-filter-hint,
+  body.printing-dashboard .dashboard-export,
+  body.printing-dashboard .overview-stats,
+  body.printing-dashboard #athletes,
+  body.printing-dashboard #training,
+  body.printing-dashboard #technical-area,
+  body.printing-dashboard #attendance,
+  body.printing-dashboard #physio,
+  body.printing-dashboard #psychological-area,
+  body.printing-dashboard #reports {
+    display: none !important;
+  }
+
+  body.printing-dashboard #dashboard {
+    display: block !important;
+  }
+
+  body.printing-dashboard .app-shell {
+    display: block;
+  }
+
+  body.printing-dashboard .main-panel {
+    padding: 0;
+  }
+
+  body.printing-dashboard .exercise-performance-grid {
+    gap: 8px;
+  }
+
+  body.printing-dashboard .exercise-group {
+    padding: 10px;
+  }
+
+  body.printing-dashboard .exercise-group-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  body.printing-dashboard .exercise-performance-card {
+    padding: 10px;
+    break-inside: avoid;
+    box-shadow: none;
+  }
+
+  body.printing-dashboard .exercise-charts {
+    gap: 5px;
+  }
+
+  body.printing-dashboard .exercise-charts canvas {
+    height: 125px !important;
+  }
+
+  body.printing-dashboard .exercise-one-rm {
+    color: #08784d;
+  }
+
+  body.printing-report .sidebar,
+  body.printing-report .topbar-actions,
+  body.printing-report #dashboard,
+  body.printing-report #athletes,
+  body.printing-report #training,
+  body.printing-report #technical-area,
+  body.printing-report #attendance,
+  body.printing-report #psychological-area,
+  body.printing-report #physio {
+    display: none !important;
+  }
+
+  body.printing-report #reports {
+    display: block !important;
+  }
+
+  body.printing-report .report-photo-control {
+    display: none !important;
+  }
+
+  body.printing-report .report-cover {
+    grid-template-columns: minmax(0, 1fr) 150px;
+    padding: 12px 16px;
+  }
+
+  body.printing-report .report-photo-frame {
+    width: 150px;
+    height: 165px;
+    break-inside: avoid;
+  }
+
+  body.printing-report .report-section-title {
+    margin-top: 0;
+  }
+
+  body.printing-report .report-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  body.printing-physio .sidebar,
+  body.printing-physio .topbar-actions,
+  body.printing-physio #dashboard,
+  body.printing-physio #athletes,
+  body.printing-physio #training,
+  body.printing-physio #technical-area,
+  body.printing-physio #attendance,
+  body.printing-physio #psychological-area,
+  body.printing-physio #reports,
+  body.printing-physio #add-physio-btn,
+  body.printing-physio .physio-header-actions,
+  body.printing-physio #physio .filters-row,
+  body.printing-physio .body-map-tabs {
+    display: none !important;
+  }
+
+  body.printing-physio #physio {
+    display: block !important;
+  }
+
+  body.printing-physio .physio-analytics-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  body.printing-physio .body-map-panel {
+    grid-column: auto;
+  }
+
+  body.printing-physio .record {
+    break-inside: avoid;
+  }
+
+  canvas {
+    max-height: 220px;
+  }
+}
 
