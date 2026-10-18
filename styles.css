@@ -1683,6 +1683,24 @@ label {
 .ipi-band-low-text { color: #bf8746; }
 .ipi-band-bad-text { color: #c65353; }
 
+.ipi-trend-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.ipi-gran {
+  display: flex;
+  gap: 8px;
+}
+
+.ipi-gran .period-mode {
+  padding: 6px 14px;
+  font-size: 0.9rem;
+}
+
 .ipi-chart-wrap {
   position: relative;
   height: 260px;

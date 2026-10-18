@@ -1611,7 +1611,66 @@ function renderIPI() {
       `<tr data-ipi-athlete="${r.athlete.id}"><td>${escapeHtml(r.athlete.name)}</td><td>${escapeHtml(r.squad || '')}</td><td class="num"><strong class="ipi-band-${ipiBand(r.ipi)}-text">${ipiFmt(r.ipi)}</strong></td>${Object.keys(IPI_WEIGHTS).map((k) => `<td class="num">${ipiFmt(r.comp[k].score)}</td>`).join('')}<td>${ipiReliabilityLabel(r.reliability)}${r.provisional ? ' · provv.' : ''}</td></tr>`).join('')}</tbody></table></div>
       <p class="ipi-disclaimer">Ogni atleta è calcolata con il calendario gare della propria squadra. Le celle "–" indicano dati mancanti.</p>`;
   }
+  const gran = periodState.ipiGran === 'month' ? 'month' : 'week';
+  const trend = `<div class="ipi-card ipi-trend">
+      <div class="ipi-trend-head"><h5>📈 Andamento IPI ${athleteId ? '' : '(media)'}</h5>
+        <div class="ipi-gran">
+          <button type="button" class="period-mode ${gran === 'week' ? 'active' : ''}" data-ipi-gran="week">Settimana</button>
+          <button type="button" class="period-mode ${gran === 'month' ? 'active' : ''}" data-ipi-gran="month">Mese</button>
+        </div></div>
+      <div class="ipi-chart-wrap"><canvas id="ipi-trend-chart"></canvas></div>
+      <small>Ogni punto è l'IPI calcolato alla data indicata, nell'intervallo scelto con "Andamento dal / al" (passo settimanale o mensile). Le date senza dati sufficienti restano vuote.</small></div>`;
   report.innerHTML = html;
+  const heroEnd = report.querySelector('.ipi-hero');
+  if (heroEnd) heroEnd.insertAdjacentHTML('afterend', trend);
+
+  const fromInput = document.getElementById('ipi-from');
+  const toInput = document.getElementById('ipi-to');
+  if (!toInput.value) toInput.value = ref;
+  if (!fromInput.value) fromInput.value = ipiAddDays(toInput.value, -77);
+  let from = fromInput.value;
+  let to = toInput.value;
+  if (to < from) [from, to] = [to, from];
+  const dates = [];
+  for (let k = 0; k < 120; k++) {
+    let d;
+    if (gran === 'week') d = ipiAddDays(from, 7 * k);
+    else {
+      const x = new Date(`${from}T12:00:00`);
+      x.setMonth(x.getMonth() + k);
+      d = toLocalISO(x);
+    }
+    if (d > to) break;
+    dates.push(d);
+  }
+  if (dates[dates.length - 1] !== to) dates.push(to);
+  const trendValues = dates.map((d) => {
+    const vals = athletes.map((a) => computeIPI(a, d).ipi).filter((v) => v !== null);
+    return vals.length ? Math.round(ipiMean(vals) * 10) / 10 : null;
+  });
+  renderChart('ipi-trend-chart', {
+    type: 'line',
+    data: {
+      labels: dates.map((d) => formatDate(d)),
+      datasets: [{
+        label: 'IPI',
+        data: trendValues,
+        borderColor: '#075a78',
+        backgroundColor: 'rgba(7,90,120,0.12)',
+        pointBackgroundColor: '#bf8746',
+        pointRadius: 4,
+        tension: 0.3,
+        fill: true,
+        spanGaps: true
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: { y: { min: 0, max: 100, title: { display: true, text: 'IPI (0–100)' } } }
+    }
+  });
 
   if (athleteId && results[0]) {
     const r = results[0];
@@ -3151,7 +3210,7 @@ function bindEvents() {
     syncAthleteSelect('ipi-squad', 'ipi-athlete');
     renderIPI();
   });
-  ['ipi-athlete', 'ipi-ref'].forEach((id) => document.getElementById(id).addEventListener('change', renderIPI));
+  ['ipi-athlete', 'ipi-ref', 'ipi-from', 'ipi-to'].forEach((id) => document.getElementById(id).addEventListener('change', renderIPI));
   document.getElementById('ipi-comp-add').addEventListener('click', addIpiCompetition);
   document.getElementById('ipi-school-add').addEventListener('click', addIpiSchoolPeriod);
   document.getElementById('ipi-comp-list').addEventListener('click', (event) => {
@@ -3169,6 +3228,12 @@ function bindEvents() {
     renderIPI();
   });
   document.getElementById('ipi-report').addEventListener('click', (event) => {
+    const gran = event.target.closest('[data-ipi-gran]');
+    if (gran) {
+      periodState.ipiGran = gran.dataset.ipiGran;
+      renderIPI();
+      return;
+    }
     const row = event.target.closest('[data-ipi-athlete]');
     if (!row) return;
     document.getElementById('ipi-athlete').value = row.dataset.ipiAthlete;
